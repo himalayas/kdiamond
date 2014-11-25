@@ -54,7 +54,7 @@ public class DiamondConfigure {
 
 
     public DiamondConfigure() {
-        filePath = System.getProperty("user.home") + "/diamond";
+        filePath = "/app/kdiamond";
         File dir = new File(filePath);
         dir.mkdirs();
 

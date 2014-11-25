@@ -303,7 +303,7 @@ public class ServerAddressProcessor {
     String generateLocalFilePath(String directory, String fileName) {
         String sign = "";
         if (null == directory) {
-            directory = System.getProperty("user.home");
+            directory = "/";
         }
         if (directory.endsWith("\\") || directory.endsWith("/")) {
             sign = "";

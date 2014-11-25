@@ -88,6 +88,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
             LoggerInit.initLogFromBizLog();
         }
         catch (Throwable _) {
+            log.error(_);
         }
     }
     private final Log dataLog = LogFactory.getLog(LoggerInit.LOG_NAME_CONFIG_DATA);
@@ -129,7 +130,9 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
      * 2.启动定时线程定时获取所有的DataId配置信息<br>
      */
     public synchronized void start() {
+        log.info("------------start----------------");
         if (isRun) {
+           log.info("running...");
             return;
         }
 
@@ -165,6 +168,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
         rotateCheckConfigInfo();
 
         addShutdownHook();
+        log.info("------------end----------------");
     }
 
 

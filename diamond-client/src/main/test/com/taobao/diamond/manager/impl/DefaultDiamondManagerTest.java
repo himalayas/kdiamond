@@ -25,11 +25,6 @@ public class DefaultDiamondManagerTest {
             }
 
         });
-        DiamondConfigure diamondConfigure=new DiamondConfigure();
-//        manager.setDiamondConfigure(diamondConfigure);
-        System.out.println(manager.getDiamondConfigure().getDomainNameList().get(0));
-        System.out.println(manager.getDiamondConfigure().getFilePath());
-        System.out.println(manager.getDiamondConfigure().getConfigServerPort());
-        System.out.println(manager.getAvailableConfigureInfomation(10));
+//        System.out.println(manager.getAvailableConfigureInfomation(10));
     }
 }
