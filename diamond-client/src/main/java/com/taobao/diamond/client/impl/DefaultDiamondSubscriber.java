@@ -108,9 +108,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
      * 2.启动定时线程定时获取所有的DataId配置信息<br>
      */
     public synchronized void start() {
-        log.debug("------------start----------------");
         if (isRun) {
-            log.debug("running...");
             return;
         }
 
@@ -145,7 +143,6 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
         rotateCheckConfigInfo();
 
         addShutdownHook();
-        log.debug("------------end----------------");
     }
 
 
@@ -543,7 +540,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
         String uri = getUriString(dataId, group);
 //        if (log.isInfoEnabled()) {
-            log.info("----------------"+uri);
+            log.info("Request URL:"+uri);
 //        }
 
         CacheData cacheData = getCacheData(dataId, group);
@@ -793,7 +790,6 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
                 httpClient.getHostConfiguration().setHost(diamondConfigure.getDomainNameList().get(this.domainNamePos.get()),
                         this.diamondConfigure.getPort());
                 int httpStatus = httpClient.executeMethod(postMethod);
-                log.info("Response code:"+httpStatus);
                 switch (httpStatus) {
                     case SC_OK: {
                         Set<String> result = getUpdateDataIds(postMethod);
@@ -878,7 +874,6 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
             }
         }
         String probeModifyString = probeModifyBuilder.toString();
-        log.info("--------------------------------------:"+probeModifyBuilder);
         return probeModifyString;
     }
 
