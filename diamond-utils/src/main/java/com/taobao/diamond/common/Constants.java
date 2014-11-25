@@ -15,11 +15,11 @@ public class Constants {
     
     public static final String BASE_DIR = "config-data";
 
-    public static final String DEFAULT_DOMAINNAME = "a.b.c";
+    public static final String DEFAULT_DOMAINNAME = "kdiamond.kuaidadi.kd";
 
-    public static final String DAILY_DOMAINNAME = "d.e.f";
+    public static final String DAILY_DOMAINNAME = "kdiamond.kuaidadi.kd";
 
-    public static final int DEFAULT_PORT = 0;
+    public static final int DEFAULT_PORT = 8080;
 
     public static final String NULL = "";
 
@@ -55,7 +55,7 @@ public class Constants {
 
     public static final String HTTP_URI_FILE = "/url";
 
-    public static final String CONFIG_HTTP_URI_FILE = "/url";
+    public static final String CONFIG_HTTP_URI_FILE = "/diamond-server/diamond";
 
     public static final String HTTP_URI_LOGIN = "/url";
 
@@ -65,9 +65,9 @@ public class Constants {
 
     public static final String WORD_SEPARATOR = Character.toString((char) 2);
 
-    public static final String DEFAULT_USERNAME = "xxx";
+    public static final String DEFAULT_USERNAME = "kuaidi";
 
-    public static final String DEFAULT_PASSWORD = "xxx";
+    public static final String DEFAULT_PASSWORD = "kuaidi";
     
     /*
      * 批量操作时, 单条数据的状态码

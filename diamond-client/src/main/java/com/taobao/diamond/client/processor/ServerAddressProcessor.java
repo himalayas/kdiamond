@@ -359,6 +359,7 @@ public class ServerAddressProcessor {
                 List<String> newDomainNameList = new LinkedList<String>();
                 while ((address = bufferedReader.readLine()) != null) {
                     address = address.trim();
+                    log.info(address);
                     if (StringUtils.isNotBlank(address)) {
                         newDomainNameList.add(address);
                     }
