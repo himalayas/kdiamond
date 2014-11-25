@@ -9,18 +9,17 @@
  */
 package com.taobao.diamond.utils;
 
+import com.taobao.diamond.common.Constants;
+
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-
-import com.taobao.diamond.common.Constants;
 
 
 /**
  * 一个带TTL的简单Cache，对于过期的entry没有清理
- * 
- * @author fenghan
- * 
+ *
  * @param <E>
+ * @author fenghan
  */
 public class SimpleCache<E> {
 

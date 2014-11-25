@@ -9,11 +9,11 @@
  */
 package com.taobao.diamond.utils;
 
+import com.taobao.diamond.common.Constants;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-
-import com.taobao.diamond.common.Constants;
 
 
 public class FileUtils {
@@ -47,8 +47,7 @@ public class FileUtils {
         File parent = file.getParentFile();
         if (parent.isDirectory()) {
             return parent.getName();
-        }
-        else {
+        } else {
             throw new RuntimeException("父目录不是目录");
         }
     }
@@ -64,12 +63,10 @@ public class FileUtils {
             File grandpa = parent.getParentFile();
             if (grandpa.isDirectory()) {
                 return grandpa.getName();
-            }
-            else {
+            } else {
                 throw new RuntimeException("祖目录不是目录");
             }
-        }
-        else {
+        } else {
             throw new RuntimeException("父目录不是目录");
         }
     }
@@ -88,15 +85,13 @@ public class FileUtils {
             int onceLength = file.read(bytes, (int) readLength, (int) (fileSize - readLength));
             if (onceLength > 0) {
                 readLength += onceLength;
-            }
-            else {
+            } else {
                 break;
             }
         }
         try {
             file.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
 
         }
         return new String(bytes, Constants.ENCODE);

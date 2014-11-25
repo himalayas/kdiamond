@@ -9,6 +9,14 @@
  */
 package com.taobao.diamond.server.service;
 
+import com.taobao.diamond.server.utils.SystemConfig;
+import com.taobao.diamond.utils.ResourceUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,20 +26,10 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import javax.annotation.PostConstruct;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import com.taobao.diamond.server.utils.SystemConfig;
-import com.taobao.diamond.utils.ResourceUtils;
-
 
 /**
  * 通知服务，用于通知其他节点
- * 
+ *
  * @author boyan
  * @date 2010-5-6
  */
@@ -59,16 +57,13 @@ public class NotifyService {
         try {
             in = ResourceUtils.getResourceAsStream("node.properties");
             nodeProperties.load(in);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             log.error("加载节点配置文件失败");
-        }
-        finally {
+        } finally {
             try {
                 if (in != null)
                     in.close();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 log.error("关闭node.properties失败", e);
             }
         }
@@ -78,7 +73,7 @@ public class NotifyService {
 
     /**
      * 通知配置信息改变
-     * 
+     *
      * @param id
      */
     public void notifyConfigInfoChange(String dataId, String group) {
@@ -109,7 +104,7 @@ public class NotifyService {
 
     /**
      * http get调用
-     * 
+     *
      * @param urlString
      * @return
      */
@@ -132,18 +127,15 @@ public class NotifyService {
                 while ((line = reader.readLine()) != null) {
                     sb.append(line);
                 }
-            }
-            finally {
+            } finally {
                 if (reader != null)
                     reader.close();
             }
             return sb.toString();
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("http调用失败,url=" + urlString, e);
-        }
-        finally {
+        } finally {
             if (conn != null) {
                 conn.disconnect();
             }

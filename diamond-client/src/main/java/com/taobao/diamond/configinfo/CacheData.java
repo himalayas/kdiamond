@@ -9,10 +9,10 @@
  */
 package com.taobao.diamond.configinfo;
 
+import com.taobao.diamond.common.Constants;
+
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-
-import com.taobao.diamond.common.Constants;
 
 
 public class CacheData {
@@ -149,14 +149,12 @@ public class CacheData {
         if (dataId == null) {
             if (other.dataId != null)
                 return false;
-        }
-        else if (!dataId.equals(other.dataId))
+        } else if (!dataId.equals(other.dataId))
             return false;
         if (group == null) {
             if (other.group != null)
                 return false;
-        }
-        else if (!group.equals(other.group))
+        } else if (!group.equals(other.group))
             return false;
         return true;
     }

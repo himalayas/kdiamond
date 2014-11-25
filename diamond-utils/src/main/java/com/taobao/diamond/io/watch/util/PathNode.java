@@ -9,17 +9,16 @@
  */
 package com.taobao.diamond.io.watch.util;
 
+import com.taobao.diamond.io.Path;
+
 import java.util.LinkedList;
 import java.util.List;
-
-import com.taobao.diamond.io.Path;
 
 
 /**
  * 树形目录结构的节点，缓存lastModified
- * 
+ *
  * @author boyan
- * 
  */
 public class PathNode {
     private List<PathNode> children;

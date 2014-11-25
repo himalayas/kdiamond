@@ -13,9 +13,9 @@ import java.text.MessageFormat;
 
 /**
  * 单个diamond基本信息配置类
- * 
- * @filename DiamondConf.java
+ *
  * @author libinbin.pt
+ * @filename DiamondConf.java
  * @datetime 2010-8-24 下午03:52:15
  */
 public class DiamondConf {
@@ -32,19 +32,21 @@ public class DiamondConf {
     // diamondServer web登录密码
     private String diamondPassword;
     private static MessageFormat DIAMONDURL_FORMAT = new MessageFormat("http://{0}:{1}");
-    public DiamondConf(){
-        
+
+    public DiamondConf() {
+
     }
+
     public DiamondConf(String diamondIp, String diamondPort, String diamondUsername, String diamondPassword) {
         this.diamondIp = diamondIp;
         this.diamondPort = diamondPort;
         this.diamondUsername = diamondUsername;
         this.diamondPassword = diamondPassword;
     }
-    
+
     //合成diamond访问路径
-    public String getDiamondConUrl(){
-        return DIAMONDURL_FORMAT.format(new String[]{this.diamondIp,this.diamondPort});
+    public String getDiamondConUrl() {
+        return DIAMONDURL_FORMAT.format(new String[]{this.diamondIp, this.diamondPort});
     }
 
     public String getDiamondIp() {

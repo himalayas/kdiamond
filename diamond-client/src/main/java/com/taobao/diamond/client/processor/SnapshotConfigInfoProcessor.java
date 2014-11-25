@@ -9,18 +9,10 @@
  */
 package com.taobao.diamond.client.processor;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-
+import com.taobao.diamond.common.Constants;
 import org.apache.commons.lang.StringUtils;
 
-import com.taobao.diamond.common.Constants;
+import java.io.*;
 
 
 public class SnapshotConfigInfoProcessor {
@@ -65,8 +57,7 @@ public class SnapshotConfigInfoProcessor {
                 sb.append(new String(data, 0, n, Constants.ENCODE));
             }
             return sb.toString();
-        }
-        finally {
+        } finally {
             if (in != null) {
                 in.close();
             }
@@ -77,7 +68,7 @@ public class SnapshotConfigInfoProcessor {
 
     /**
      * ±£´æsnapshot
-     * 
+     *
      * @param dataId
      * @param group
      * @param config
@@ -102,8 +93,7 @@ public class SnapshotConfigInfoProcessor {
             writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(stream, Constants.ENCODE)));
             writer.write(config);
             writer.flush();
-        }
-        finally {
+        } finally {
             if (writer != null)
                 writer.close();
             if (out != null) {
@@ -115,7 +105,7 @@ public class SnapshotConfigInfoProcessor {
 
     /**
      * É¾³ýsnapshot
-     * 
+     *
      * @param dataId
      * @param group
      */

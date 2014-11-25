@@ -1,20 +1,18 @@
 package com.taobao.diamond.server.controller;
 
-import java.io.IOException;
+import com.taobao.diamond.common.Constants;
+import com.taobao.diamond.server.service.ConfigService;
+import com.taobao.diamond.server.service.DiskService;
+import org.springframework.util.StringUtils;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.util.StringUtils;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-
-import com.taobao.diamond.common.Constants;
-import com.taobao.diamond.server.service.ConfigService;
-import com.taobao.diamond.server.service.DiskService;
+import java.io.IOException;
 
 
 public class ConfigServlet extends HttpServlet {
@@ -44,7 +42,7 @@ public class ConfigServlet extends HttpServlet {
 
     /**
      * 查找真实的IP地址
-     * 
+     *
      * @param request
      * @return
      */
@@ -57,7 +55,7 @@ public class ConfigServlet extends HttpServlet {
 
 
     public void forward(HttpServletRequest request, HttpServletResponse response, String page, String basePath,
-            String postfix) throws IOException, ServletException {
+                        String postfix) throws IOException, ServletException {
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(basePath + page + postfix);
         requestDispatcher.forward(request, response);
     }
@@ -87,8 +85,7 @@ public class ConfigServlet extends HttpServlet {
         if (page.startsWith("forward:")) {
             page = page.substring(8);
             forward(request, response, page, "", "");
-        }
-        else {
+        } else {
             forward(request, response, page, "/jsp/", ".jsp");
         }
 

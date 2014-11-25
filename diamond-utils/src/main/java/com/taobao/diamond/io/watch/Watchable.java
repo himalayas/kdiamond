@@ -11,9 +11,8 @@ package com.taobao.diamond.io.watch;
 
 /**
  * 标记接口，实现此接口的类可以被注册到WatchService
- * 
+ *
  * @author boyan
- * 
  */
 public interface Watchable {
     public WatchKey register(WatchService watcher, WatchEvent.Kind<?>... events);

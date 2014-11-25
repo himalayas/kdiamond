@@ -40,7 +40,7 @@ public class LoggerInit {
         defaultProperties.put("log4j.appender.DiamondConfigDataLogFile.DatePattern", "'.'yyyy-MM-dd");
         defaultProperties.put("log4j.appender.DiamondConfigDataLogFile.File", "/app/kdiamond/logs/diamond_config_data.log");
         defaultProperties.put("log4j.appender.DiamondConfigDataLogFile.layout", "org.apache.log4j.PatternLayout");
-        defaultProperties.put("log4j.appender.DiamondConfigDataLogFile.layout.ConversionPattern","%d{MM-dd HH:mm:ss} - %m%n");
+        defaultProperties.put("log4j.appender.DiamondConfigDataLogFile.layout.ConversionPattern", "%d{MM-dd HH:mm:ss} - %m%n");
         defaultProperties.put("log4j.appender.DiamondConfigDataLogFile.Append", "true");
     }
 

@@ -65,8 +65,7 @@ public class PageContextResult<T> {
         // 否则总页数为(总记录数 /每页大小+1)
         if (totalCounts % sizeOfPerPage == 0) {
             totalPages = totalCounts / sizeOfPerPage;
-        }
-        else
+        } else
             totalPages = totalCounts / sizeOfPerPage + 1;
 
         // =========纠正总页数

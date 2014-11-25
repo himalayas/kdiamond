@@ -9,24 +9,10 @@
  */
 package com.taobao.diamond.client.processor;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.SimpleHttpConnectionManager;
+import com.taobao.diamond.client.DiamondConfigure;
+import com.taobao.diamond.common.Constants;
+import com.taobao.diamond.mockserver.MockServer;
+import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
@@ -34,9 +20,12 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.taobao.diamond.client.DiamondConfigure;
-import com.taobao.diamond.common.Constants;
-import com.taobao.diamond.mockserver.MockServer;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 public class ServerAddressProcessor {
@@ -72,8 +61,7 @@ public class ServerAddressProcessor {
         initHttpClient();
         if (this.diamondConfigure.isLocalFirst()) {
             acquireServerAddressFromLocal();
-        }
-        else {
+        } else {
             synAcquireServerAddress();
             asynAcquireServerAddress();
         }
@@ -125,18 +113,15 @@ public class ServerAddressProcessor {
                         // 存入本地文件
                         storeServerAddressesToLocal();
                         log.info("在同步获取服务器列表时，向日常ConfigServer服务器获取到了服务器列表");
-                    }
-                    else {
+                    } else {
                         throw new RuntimeException("当前没有可用的服务器列表");
                     }
-                }
-                else {
+                } else {
                     log.info("在同步获取服务器列表时，向线上ConfigServer服务器获取到了服务器列表");
                     // 存入本地文件
                     storeServerAddressesToLocal();
                 }
-            }
-            else {
+            } else {
                 log.info("在同步获取服务器列表时，由于本地指定了服务器列表，不向ConfigServer服务器同步获取服务器列表");
             }
         }
@@ -160,15 +145,13 @@ public class ServerAddressProcessor {
                     // 存入本地文件
                     storeServerAddressesToLocal();
                     log.info("在同步获取服务器列表时，向日常ConfigServer服务器获取到了服务器列表");
-                }
-                else {
+                } else {
                     log.info("从本地获取Diamond地址列表");
                     reloadServerAddresses();
                     if (diamondConfigure.getDomainNameList().size() == 0)
                         throw new RuntimeException("当前没有可用的服务器列表");
                 }
-            }
-            else {
+            } else {
                 log.info("在同步获取服务器列表时，向线上ConfigServer服务器获取到了服务器列表");
                 // 存入本地文件
                 storeServerAddressesToLocal();
@@ -194,8 +177,7 @@ public class ServerAddressProcessor {
                         // 存入本地文件
                         storeServerAddressesToLocal();
                     }
-                }
-                else {
+                } else {
                     // 存入本地文件
                     storeServerAddressesToLocal();
                 }
@@ -223,16 +205,13 @@ public class ServerAddressProcessor {
                 bufferedWriter.newLine();
             }
             bufferedWriter.flush();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("存储服务器地址到本地文件失败", e);
-        }
-        finally {
+        } finally {
             if (bufferedWriter != null) {
                 try {
                     bufferedWriter.close();
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     // ignore
                 }
             }
@@ -267,32 +246,27 @@ public class ServerAddressProcessor {
             bufferedReader.close();
             reader.close();
             fis.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("从本地文件取服务器地址失败", e);
-        }
-        finally {
+        } finally {
             if (bufferedReader != null) {
                 try {
                     bufferedReader.close();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
 
                 }
             }
             if (reader != null) {
                 try {
                     reader.close();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
 
                 }
             }
             if (fis != null) {
                 try {
                     fis.close();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
 
                 }
             }
@@ -307,8 +281,7 @@ public class ServerAddressProcessor {
         }
         if (directory.endsWith("\\") || directory.endsWith("/")) {
             sign = "";
-        }
-        else {
+        } else {
             sign = "/";
         }
         return directory + sign + fileName;
@@ -317,9 +290,8 @@ public class ServerAddressProcessor {
 
     /**
      * 获取diamond服务器地址列表
-     * 
-     * @param acquireCount
-     *            根据0或1决定从日常或线上获取
+     *
+     * @param acquireCount 根据0或1决定从日常或线上获取
      * @return
      */
     private boolean acquireServerAddressOnce(int acquireCount) {
@@ -329,13 +301,11 @@ public class ServerAddressProcessor {
         if (null != diamondConfigure.getConfigServerAddress()) {
             configServerAddress = diamondConfigure.getConfigServerAddress();
             port = diamondConfigure.getConfigServerPort();
-        }
-        else {
+        } else {
             if (acquireCount == 0) {
                 configServerAddress = Constants.DEFAULT_DOMAINNAME;
                 port = Constants.DEFAULT_PORT;
-            }
-            else {
+            } else {
                 configServerAddress = Constants.DAILY_DOMAINNAME;
                 port = Constants.DEFAULT_PORT;
             }
@@ -369,21 +339,16 @@ public class ServerAddressProcessor {
                     this.diamondConfigure.setDomainNameList(newDomainNameList);
                     return true;
                 }
-            }
-            else {
+            } else {
                 log.warn("没有可用的新服务器列表");
             }
-        }
-        catch (HttpException e) {
+        } catch (HttpException e) {
             log.error(getErrorMessage(configServerAddress) + ", " + e);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             log.error(getErrorMessage(configServerAddress) + ", " + e);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error(getErrorMessage(configServerAddress) + ", " + e);
-        }
-        finally {
+        } finally {
             httpMethod.releaseConnection();
         }
         return false;
@@ -393,8 +358,7 @@ public class ServerAddressProcessor {
     public String getErrorMessage(String configServerAddress) {
         if (configServerAddress.equals(Constants.DEFAULT_DOMAINNAME)) {
             return "获取服务器地址列表信息Http异常,如果你是在日常环境，请忽略这个异常,configServerAddress=" + configServerAddress + ",";
-        }
-        else {
+        } else {
             return "获取服务器地址列表信息Http异常, configServerAddress=" + configServerAddress + ",";
         }
     }

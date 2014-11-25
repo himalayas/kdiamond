@@ -9,19 +9,18 @@
  */
 package com.taobao.diamond.server.service;
 
-import java.util.concurrent.ConcurrentHashMap;
-
+import com.taobao.diamond.common.Constants;
+import com.taobao.diamond.domain.ConfigInfo;
+import com.taobao.diamond.domain.Page;
+import com.taobao.diamond.md5.MD5;
+import com.taobao.diamond.server.exception.ConfigServiceException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.taobao.diamond.common.Constants;
-import com.taobao.diamond.domain.ConfigInfo;
-import com.taobao.diamond.domain.Page;
-import com.taobao.diamond.md5.MD5;
-import com.taobao.diamond.server.exception.ConfigServiceException;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 @Service
@@ -55,7 +54,7 @@ public class ConfigService {
 
     public void updateMD5Cache(ConfigInfo configInfo) {
         this.contentMD5Cache.put(generateMD5CacheKey(configInfo.getDataId(), configInfo.getGroup()), MD5.getInstance()
-            .getMD5String(configInfo.getContent()));
+                .getMD5String(configInfo.getContent()));
     }
 
 
@@ -67,8 +66,7 @@ public class ConfigService {
                 // 二重检查
                 return this.contentMD5Cache.get(key);
             }
-        }
-        else {
+        } else {
             return md5;
         }
     }
@@ -98,8 +96,7 @@ public class ConfigService {
             // 通知其他节点
             this.notifyOtherNodes(configInfo.getDataId(), configInfo.getGroup());
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("删除配置信息错误", e);
             throw new ConfigServiceException(e);
         }
@@ -117,8 +114,7 @@ public class ConfigService {
             diskService.saveToDisk(configInfo);
             // 通知其他节点
             this.notifyOtherNodes(dataId, group);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("保存ConfigInfo失败", e);
             throw new ConfigServiceException(e);
         }
@@ -127,7 +123,7 @@ public class ConfigService {
 
     /**
      * 更新配置信息
-     * 
+     *
      * @param dataId
      * @param group
      * @param content
@@ -143,8 +139,7 @@ public class ConfigService {
             diskService.saveToDisk(configInfo);
             // 通知其他节点
             this.notifyOtherNodes(dataId, group);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("保存ConfigInfo失败", e);
             throw new ConfigServiceException(e);
         }
@@ -153,7 +148,7 @@ public class ConfigService {
 
     /**
      * 将配置信息从数据库加载到磁盘
-     * 
+     *
      * @param id
      */
     public void loadConfigInfoToDisk(String dataId, String group) {
@@ -162,14 +157,12 @@ public class ConfigService {
             if (configInfo != null) {
                 this.contentMD5Cache.put(generateMD5CacheKey(dataId, group), configInfo.getMd5());
                 this.diskService.saveToDisk(configInfo);
-            }
-            else {
+            } else {
                 // 删除文件
                 this.contentMD5Cache.remove(generateMD5CacheKey(dataId, group));
                 this.diskService.removeConfigInfo(dataId, group);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("保存ConfigInfo到磁盘失败", e);
             throw new ConfigServiceException(e);
         }
@@ -183,7 +176,7 @@ public class ConfigService {
 
     /**
      * 分页查找配置信息
-     * 
+     *
      * @param pageNo
      * @param pageSize
      * @param group
@@ -201,14 +194,11 @@ public class ConfigService {
                 page.getPageItems().add(ConfigInfo);
             }
             return page;
-        }
-        else if (StringUtils.hasLength(dataId) && !StringUtils.hasLength(group)) {
+        } else if (StringUtils.hasLength(dataId) && !StringUtils.hasLength(group)) {
             return this.persistService.findConfigInfoByDataId(pageNo, pageSize, dataId);
-        }
-        else if (!StringUtils.hasLength(dataId) && StringUtils.hasLength(group)) {
+        } else if (!StringUtils.hasLength(dataId) && StringUtils.hasLength(group)) {
             return this.persistService.findConfigInfoByGroup(pageNo, pageSize, group);
-        }
-        else {
+        } else {
             return this.persistService.findAllConfigInfo(pageNo, pageSize);
         }
     }
@@ -216,7 +206,7 @@ public class ConfigService {
 
     /**
      * 分页模糊查找配置信息
-     * 
+     *
      * @param pageNo
      * @param pageSize
      * @param group
@@ -224,7 +214,7 @@ public class ConfigService {
      * @return
      */
     public Page<ConfigInfo> findConfigInfoLike(final int pageNo, final int pageSize, final String group,
-            final String dataId) {
+                                               final String dataId) {
         return this.persistService.findConfigInfoLike(pageNo, pageSize, dataId, group);
     }
 

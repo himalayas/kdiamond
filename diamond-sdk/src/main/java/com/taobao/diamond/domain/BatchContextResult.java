@@ -7,9 +7,8 @@ import java.util.List;
 
 /**
  * 批处理的返回结果
- * 
+ *
  * @author leiwen.zh
- * 
  */
 public class BatchContextResult<T> implements Serializable {
 

@@ -1,13 +1,10 @@
 package com.taobao.diamond.manager.impl;
 
-import com.taobao.diamond.client.DiamondConfigure;
 import com.taobao.diamond.manager.DiamondManager;
 import com.taobao.diamond.manager.ManagerListener;
 import org.junit.Test;
 
 import java.util.concurrent.Executor;
-
-import static org.junit.Assert.*;
 
 public class DefaultDiamondManagerTest {
 
@@ -18,13 +15,11 @@ public class DefaultDiamondManagerTest {
             public Executor getExecutor() {
                 return null;
             }
+
             public void receiveConfigInfo(String configInfo) {
-
                 System.out.println(configInfo);
-
             }
 
         });
-//        System.out.println(manager.getAvailableConfigureInfomation(10));
     }
 }

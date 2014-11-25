@@ -9,18 +9,17 @@
  */
 package com.taobao.diamond.server.controller;
 
+import com.taobao.diamond.server.service.ConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.taobao.diamond.server.service.ConfigService;
-
 
 /**
  * 用于其他节点通知的控制器
- * 
+ *
  * @author boyan
  * @date 2010-5-7
  */
@@ -44,7 +43,7 @@ public class NotifyController {
 
     /**
      * 通知配置信息改变
-     * 
+     *
      * @param id
      * @return
      */

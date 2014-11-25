@@ -11,7 +11,7 @@ package com.taobao.diamond.server.utils;
 
 /**
  * 全局计数器
- * 
+ *
  * @author boyan
  * @date 2010-5-31
  */
@@ -29,8 +29,7 @@ public class GlobalCounter {
     public synchronized long decrementAndGet() {
         if (count == Long.MIN_VALUE) {
             count = 0;
-        }
-        else
+        } else
             count--;
         return count;
     }

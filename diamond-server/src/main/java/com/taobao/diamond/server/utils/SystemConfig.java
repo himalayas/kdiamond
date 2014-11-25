@@ -9,17 +9,16 @@
  */
 package com.taobao.diamond.server.utils;
 
+import com.taobao.diamond.utils.ResourceUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
 import java.util.Properties;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import com.taobao.diamond.utils.ResourceUtils;
 
 
 public class SystemConfig {
@@ -40,16 +39,13 @@ public class SystemConfig {
             Properties props = new Properties();
             props.load(in);
             dumpConfigInterval = Integer.parseInt(props.getProperty("dump_config_interval", "600"));
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             log.error("加载system.properties出错", e);
-        }
-        finally {
+        } finally {
             if (in != null) {
                 try {
                     in.close();
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     log.error("关闭system.properties出错", e);
                 }
             }
@@ -81,8 +77,7 @@ public class SystemConfig {
                     }
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
         }
         return address;
     }

@@ -9,23 +9,23 @@
  */
 package com.taobao.diamond.md5;
 
+import com.taobao.diamond.common.Constants;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import com.taobao.diamond.common.Constants;
-
 
 public class MD5 {
     private static final Log log = LogFactory.getLog(MD5.class);
-    private static char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+    private static char[] digits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
     private static Map<Character, Integer> rDigits = new HashMap<Character, Integer>(16);
+
     static {
         for (int i = 0; i < digits.length; ++i) {
             rDigits.put(digits[i], i);
@@ -40,8 +40,7 @@ public class MD5 {
     private MD5() {
         try {
             mHasher = MessageDigest.getInstance("md5");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
@@ -70,7 +69,7 @@ public class MD5 {
 
     /**
      * 对字符串进行md5
-     * 
+     *
      * @param str
      * @return md5 byte[16]
      */
@@ -82,11 +81,9 @@ public class MD5 {
                 throw new IllegalArgumentException("md5 need");
             }
             return bt;
-        }
-        catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("unsupported utf-8 encoding", e);
-        }
-        finally {
+        } finally {
             opLock.unlock();
         }
     }
@@ -94,7 +91,7 @@ public class MD5 {
 
     /**
      * 对二进制数据进行md5
-     * 
+     *
      * @param str
      * @return md5 byte[16]
      */
@@ -106,8 +103,7 @@ public class MD5 {
                 throw new IllegalArgumentException("md5 need");
             }
             return bt;
-        }
-        finally {
+        } finally {
             opLock.unlock();
         }
     }
@@ -115,7 +111,7 @@ public class MD5 {
 
     /**
      * 将一个字节数组转化为可见的字符串
-     * 
+     *
      * @param bt
      * @return
      */
@@ -139,7 +135,7 @@ public class MD5 {
 
     /**
      * 将字符串转换为bytes
-     * 
+     *
      * @param str
      * @return byte[]
      */

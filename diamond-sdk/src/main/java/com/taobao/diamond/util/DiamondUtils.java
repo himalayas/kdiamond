@@ -11,12 +11,12 @@ package com.taobao.diamond.util;
 
 public class DiamondUtils {
     public static final char[] INVALID_CHAR =
-            {';', '&', '%', '#', '$', '@', ',', '*', '^', '~', '(', ')', '/', '\\', '|', '+' };
+            {';', '&', '%', '#', '$', '@', ',', '*', '^', '~', '(', ')', '/', '\\', '|', '+'};
 
 
     /**
      * ÅÐ¶Ï×Ö·û´®ÊÇ·ñÓÐ¿Õ¸ñ
-     * 
+     *
      * @param str
      * @return
      */

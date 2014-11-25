@@ -9,16 +9,15 @@
  */
 package com.taobao.diamond.client;
 
-import java.util.concurrent.Executor;
-
 import com.taobao.diamond.configinfo.ConfigureInfomation;
+
+import java.util.concurrent.Executor;
 
 
 /**
  * Diamond订阅者的配置信息监听器
- * 
+ *
  * @author aoqiong
- * 
  */
 public interface SubscriberListener {
 
@@ -27,7 +26,7 @@ public interface SubscriberListener {
 
     /**
      * 接收到一次配置信息
-     * 
+     *
      * @param configureInfomation
      */
     public void receiveConfigInfo(final ConfigureInfomation configureInfomation);

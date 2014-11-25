@@ -9,20 +9,19 @@
  */
 package com.taobao.diamond.client;
 
+import com.taobao.diamond.common.Constants;
+import com.taobao.diamond.mockserver.MockServer;
+
 import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.taobao.diamond.common.Constants;
-import com.taobao.diamond.mockserver.MockServer;
-
 
 /**
  * Diamond客户端的配置信息
- * 
+ *
  * @author aoqiong
- * 
  */
 public class DiamondConfigure {
 
@@ -66,7 +65,7 @@ public class DiamondConfigure {
 
     /**
      * 获取和同一个DiamondServer的最大连接数
-     * 
+     *
      * @return
      */
     public int getMaxHostConnections() {
@@ -77,7 +76,7 @@ public class DiamondConfigure {
     /**
      * 设置和同一个DiamondServer的最大连接数<br>
      * 不支持运行时动态更新
-     * 
+     *
      * @param maxHostConnections
      */
     public void setMaxHostConnections(int maxHostConnections) {
@@ -88,7 +87,7 @@ public class DiamondConfigure {
     /**
      * 是否允许对陈旧的连接情况进行检测。<br>
      * 如果不检测，性能上会有所提升，但是，会有使用不可用连接的风险导致的IO Exception
-     * 
+     *
      * @return
      */
     public boolean isConnectionStaleCheckingEnabled() {
@@ -99,7 +98,7 @@ public class DiamondConfigure {
     /**
      * 设置是否允许对陈旧的连接情况进行检测。<br>
      * 不支持运行时动态更新
-     * 
+     *
      * @param connectionStaleCheckingEnabled
      */
     public void setConnectionStaleCheckingEnabled(boolean connectionStaleCheckingEnabled) {
@@ -109,7 +108,7 @@ public class DiamondConfigure {
 
     /**
      * 获取允许的最大的连接数量。
-     * 
+     *
      * @return
      */
     public int getMaxTotalConnections() {
@@ -120,7 +119,7 @@ public class DiamondConfigure {
     /**
      * 设置允许的最大的连接数量。<br>
      * 不支持运行时动态更新
-     * 
+     *
      * @param maxTotalConnections
      */
     public void setMaxTotalConnections(int maxTotalConnections) {
@@ -132,7 +131,7 @@ public class DiamondConfigure {
      * 获取轮询的间隔时间。单位：秒<br>
      * 此间隔时间代表轮询查找一次配置信息的间隔时间，对于容灾相关，请设置短一些；<br>
      * 对于其他不可变的配置信息，请设置长一些
-     * 
+     *
      * @return
      */
     public int getPollingIntervalTime() {
@@ -142,7 +141,7 @@ public class DiamondConfigure {
 
     /**
      * 设置轮询的间隔时间。单位：秒
-     * 
+     *
      * @param pollingIntervalTime
      */
     public void setPollingIntervalTime(int pollingIntervalTime) {
@@ -155,7 +154,7 @@ public class DiamondConfigure {
 
     /**
      * 获取当前支持的所有的DiamondServer域名列表
-     * 
+     *
      * @return
      */
     public List<String> getDomainNameList() {
@@ -165,7 +164,7 @@ public class DiamondConfigure {
 
     /**
      * 设置当前支持的所有的DiamondServer域名列表，当设置了域名列表后，缺省的域名列表将失效
-     * 
+     *
      * @param domainNameList
      */
     public void setDomainNameList(List<String> domainNameList) {
@@ -178,7 +177,7 @@ public class DiamondConfigure {
 
     /**
      * 添加一个DiamondServer域名，当设置了域名列表后，缺省的域名列表将失效
-     * 
+     *
      * @param domainName
      */
     public void addDomainName(String domainName) {
@@ -191,7 +190,7 @@ public class DiamondConfigure {
 
     /**
      * 添加多个DiamondServer域名，当设置了域名列表后，缺省的域名列表将失效
-     * 
+     *
      * @param domainNameList
      */
     public void addDomainNames(Collection<String> domainNameList) {
@@ -204,7 +203,7 @@ public class DiamondConfigure {
 
     /**
      * 获取DiamondServer的端口号
-     * 
+     *
      * @return
      */
     public int getPort() {
@@ -215,7 +214,7 @@ public class DiamondConfigure {
     /**
      * 设置DiamondServer的端口号<br>
      * 不支持运行时动态更新
-     * 
+     *
      * @param port
      */
     public void setPort(int port) {
@@ -225,7 +224,7 @@ public class DiamondConfigure {
 
     /**
      * 获取探测本地文件的路径
-     * 
+     *
      * @return
      */
     public String getFilePath() {
@@ -236,7 +235,7 @@ public class DiamondConfigure {
     /**
      * 设置探测本地文件的路径<br>
      * 不支持运行时动态更新
-     * 
+     *
      * @param filePath
      */
     public void setFilePath(String filePath) {
@@ -248,7 +247,7 @@ public class DiamondConfigure {
      * 获取对于一个DiamondServer所对应的查询一个DataID对应的配置信息的Timeout时间<br>
      * 即一次HTTP请求的超时时间<br>
      * 单位：毫秒<br>
-     * 
+     *
      * @return
      */
     public int getOnceTimeout() {
@@ -260,7 +259,7 @@ public class DiamondConfigure {
      * 设置对于一个DiamondServer所对应的查询一个DataID对应的配置信息的Timeout时间<br>
      * 单位：毫秒<br>
      * 配置信息越大，请将此值设置得越大
-     * 
+     *
      * @return
      */
     public void setOnceTimeout(int onceTimeout) {
@@ -270,7 +269,7 @@ public class DiamondConfigure {
 
     /**
      * 获取和DiamondServer的连接建立超时时间。单位：毫秒
-     * 
+     *
      * @return
      */
     public int getConnectionTimeout() {
@@ -281,7 +280,7 @@ public class DiamondConfigure {
     /**
      * 设置和DiamondServer的连接建立超时时间。单位：毫秒<br>
      * 不支持运行时动态更新
-     * 
+     *
      * @param connectionTimeout
      */
     public void setConnectionTimeout(int connectionTimeout) {
@@ -292,7 +291,7 @@ public class DiamondConfigure {
     /**
      * 同步查询一个DataID的最长等待时间<br>
      * 实际最长等待时间小于receiveWaitTime + min(connectionTimeout, onceTimeout)
-     * 
+     *
      * @return
      */
     public int getReceiveWaitTime() {
@@ -304,7 +303,7 @@ public class DiamondConfigure {
      * 设置一个DataID的最长等待时间<br>
      * 实际最长等待时间小于receiveWaitTime + min(connectionTimeout, onceTimeout)
      * 建议此值设置为OnceTimeout * （DomainName个数 + 1）
-     * 
+     *
      * @param receiveWaitTime
      */
     public void setReceiveWaitTime(int receiveWaitTime) {
@@ -314,7 +313,7 @@ public class DiamondConfigure {
 
     /**
      * 获取线程池的线程数量
-     * 
+     *
      * @return
      */
     public int getScheduledThreadPoolSize() {
@@ -324,7 +323,7 @@ public class DiamondConfigure {
 
     /**
      * 设置线程池的线程数量，缺省为1
-     * 
+     *
      * @param scheduledThreadPoolSize
      */
     public void setScheduledThreadPoolSize(int scheduledThreadPoolSize) {
@@ -334,7 +333,7 @@ public class DiamondConfigure {
 
     /**
      * 是否使用同步接口流控
-     * 
+     *
      * @return
      */
     public boolean isUseFlowControl() {
@@ -344,7 +343,7 @@ public class DiamondConfigure {
 
     /**
      * 设置是否使用同步接口流控
-     * 
+     *
      * @param useFlowControl
      */
     public void setUseFlowControl(boolean useFlowControl) {

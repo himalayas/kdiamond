@@ -9,13 +9,16 @@
  */
 package com.taobao.diamond.server.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.taobao.diamond.common.Constants;
+import com.taobao.diamond.domain.ConfigInfo;
+import com.taobao.diamond.domain.ConfigInfoEx;
+import com.taobao.diamond.domain.Page;
+import com.taobao.diamond.server.exception.ConfigServiceException;
+import com.taobao.diamond.server.service.AdminService;
+import com.taobao.diamond.server.service.ConfigService;
+import com.taobao.diamond.server.utils.DiamondUtils;
+import com.taobao.diamond.server.utils.GlobalCounter;
+import com.taobao.diamond.utils.JSONUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,21 +30,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.taobao.diamond.common.Constants;
-import com.taobao.diamond.domain.ConfigInfo;
-import com.taobao.diamond.domain.ConfigInfoEx;
-import com.taobao.diamond.domain.Page;
-import com.taobao.diamond.server.exception.ConfigServiceException;
-import com.taobao.diamond.server.service.AdminService;
-import com.taobao.diamond.server.service.ConfigService;
-import com.taobao.diamond.server.utils.DiamondUtils;
-import com.taobao.diamond.server.utils.GlobalCounter;
-import com.taobao.diamond.utils.JSONUtils;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 /**
  * 管理控制器
- * 
+ *
  * @author boyan
  * @date 2010-5-6
  */
@@ -60,8 +58,8 @@ public class AdminController {
 
     @RequestMapping(params = "method=postConfig", method = RequestMethod.POST)
     public String postConfig(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("dataId") String dataId, @RequestParam("group") String group,
-            @RequestParam("content") String content, ModelMap modelMap) {
+                             @RequestParam("dataId") String dataId, @RequestParam("group") String group,
+                             @RequestParam("content") String content, ModelMap modelMap) {
         response.setCharacterEncoding("GBK");
 
         boolean checkSuccess = true;
@@ -95,7 +93,7 @@ public class AdminController {
 
     @RequestMapping(params = "method=deleteConfig", method = RequestMethod.GET)
     public String deleteConfig(HttpServletRequest request, HttpServletResponse response, @RequestParam("id") long id,
-            ModelMap modelMap) {
+                               ModelMap modelMap) {
         // 删除数据
         this.configService.removeConfigInfo(id);
         modelMap.addAttribute("message", "删除成功!");
@@ -105,8 +103,8 @@ public class AdminController {
 
     @RequestMapping(params = "method=upload", method = RequestMethod.POST)
     public String upload(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("dataId") String dataId, @RequestParam("group") String group,
-            @RequestParam("contentFile") MultipartFile contentFile, ModelMap modelMap) {
+                         @RequestParam("dataId") String dataId, @RequestParam("group") String group,
+                         @RequestParam("contentFile") MultipartFile contentFile, ModelMap modelMap) {
         response.setCharacterEncoding("GBK");
 
         boolean checkSuccess = true;
@@ -137,8 +135,8 @@ public class AdminController {
 
     @RequestMapping(params = "method=reupload", method = RequestMethod.POST)
     public String reupload(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("dataId") String dataId, @RequestParam("group") String group,
-            @RequestParam("contentFile") MultipartFile contentFile, ModelMap modelMap) {
+                           @RequestParam("dataId") String dataId, @RequestParam("group") String group,
+                           @RequestParam("contentFile") MultipartFile contentFile, ModelMap modelMap) {
         response.setCharacterEncoding("GBK");
 
         boolean checkSuccess = true;
@@ -175,8 +173,7 @@ public class AdminController {
             String charset = Constants.ENCODE;
             final String content = new String(contentFile.getBytes(), charset);
             return content;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new ConfigServiceException(e);
         }
     }
@@ -184,8 +181,8 @@ public class AdminController {
 
     @RequestMapping(params = "method=updateConfig", method = RequestMethod.POST)
     public String updateConfig(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("dataId") String dataId, @RequestParam("group") String group,
-            @RequestParam("content") String content, ModelMap modelMap) {
+                               @RequestParam("dataId") String dataId, @RequestParam("group") String group,
+                               @RequestParam("content") String content, ModelMap modelMap) {
         response.setCharacterEncoding("GBK");
 
         ConfigInfo configInfo = new ConfigInfo(dataId, group, content);
@@ -218,8 +215,8 @@ public class AdminController {
 
     @RequestMapping(params = "method=listConfig", method = RequestMethod.GET)
     public String listConfig(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("dataId") String dataId, @RequestParam("group") String group,
-            @RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize, ModelMap modelMap) {
+                             @RequestParam("dataId") String dataId, @RequestParam("group") String group,
+                             @RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize, ModelMap modelMap) {
         Page<ConfigInfo> page = this.configService.findConfigInfo(pageNo, pageSize, group, dataId);
 
         String accept = request.getHeader("Accept");
@@ -227,13 +224,11 @@ public class AdminController {
             try {
                 String json = JSONUtils.serializeObject(page);
                 modelMap.addAttribute("pageJson", json);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 log.error("序列化page对象出错", e);
             }
             return "/admin/config/list_json";
-        }
-        else {
+        } else {
             modelMap.addAttribute("dataId", dataId);
             modelMap.addAttribute("group", group);
             modelMap.addAttribute("page", page);
@@ -244,8 +239,8 @@ public class AdminController {
 
     @RequestMapping(params = "method=listConfigLike", method = RequestMethod.GET)
     public String listConfigLike(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("dataId") String dataId, @RequestParam("group") String group,
-            @RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize, ModelMap modelMap) {
+                                 @RequestParam("dataId") String dataId, @RequestParam("group") String group,
+                                 @RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize, ModelMap modelMap) {
         if (StringUtils.isBlank(dataId) && StringUtils.isBlank(group)) {
             modelMap.addAttribute("message", "模糊查询请至少设置一个查询参数");
             return "/admin/config/list";
@@ -257,13 +252,11 @@ public class AdminController {
             try {
                 String json = JSONUtils.serializeObject(page);
                 modelMap.addAttribute("pageJson", json);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 log.error("序列化page对象出错", e);
             }
             return "/admin/config/list_json";
-        }
-        else {
+        } else {
             modelMap.addAttribute("page", page);
             modelMap.addAttribute("dataId", dataId);
             modelMap.addAttribute("group", group);
@@ -275,7 +268,7 @@ public class AdminController {
 
     @RequestMapping(params = "method=detailConfig", method = RequestMethod.GET)
     public String getConfigInfo(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("dataId") String dataId, @RequestParam("group") String group, ModelMap modelMap) {
+                                @RequestParam("dataId") String dataId, @RequestParam("group") String group, ModelMap modelMap) {
         dataId = dataId.trim();
         group = group.trim();
         ConfigInfo configInfo = this.configService.findConfigInfo(dataId, group);
@@ -288,7 +281,7 @@ public class AdminController {
 
     @RequestMapping(params = "method=batchQuery", method = RequestMethod.POST)
     public String batchQuery(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("dataIds") String dataIds, @RequestParam("group") String group, ModelMap modelMap) {
+                             @RequestParam("dataIds") String dataIds, @RequestParam("group") String group, ModelMap modelMap) {
 
         response.setCharacterEncoding("GBK");
 
@@ -324,16 +317,14 @@ public class AdminController {
                     // 没有异常, 说明查询成功, 但数据不存在, 设置不存在的状态码
                     configInfoEx.setStatus(Constants.BATCH_QUERY_NONEXISTS);
                     configInfoEx.setMessage("query data does not exist");
-                }
-                else {
+                } else {
                     // 没有异常, 说明查询成功, 而且数据存在, 设置存在的状态码
                     String content = configInfo.getContent();
                     configInfoEx.setContent(content);
                     configInfoEx.setStatus(Constants.BATCH_QUERY_EXISTS);
                     configInfoEx.setMessage("query success");
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 log.error("批量查询, 在查询这个dataId时出错, dataId=" + dataId + ",group=" + group, e);
                 // 出现异常, 设置异常状态码
                 configInfoEx.setStatus(Constants.BATCH_OP_ERROR);
@@ -344,8 +335,7 @@ public class AdminController {
         String json = null;
         try {
             json = JSONUtils.serializeObject(configInfoExList);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("批量查询结果序列化出错, json=" + json, e);
         }
         modelMap.addAttribute("json", json);
@@ -356,8 +346,8 @@ public class AdminController {
 
     @RequestMapping(params = "method=batchAddOrUpdate", method = RequestMethod.POST)
     public String batchAddOrUpdate(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("allDataIdAndContent") String allDataIdAndContent, @RequestParam("group") String group,
-            ModelMap modelMap) {
+                                   @RequestParam("allDataIdAndContent") String allDataIdAndContent, @RequestParam("group") String group,
+                                   ModelMap modelMap) {
 
         response.setCharacterEncoding("GBK");
 
@@ -401,16 +391,14 @@ public class AdminController {
                     // 新增成功, 设置状态码
                     configInfoEx.setStatus(Constants.BATCH_ADD_SUCCESS);
                     configInfoEx.setMessage("add success");
-                }
-                else {
+                } else {
                     // 数据存在, 更新
                     this.configService.updateConfigInfo(dataId, group, content);
                     // 更新成功, 设置状态码
                     configInfoEx.setStatus(Constants.BATCH_UPDATE_SUCCESS);
                     configInfoEx.setMessage("update success");
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 log.error("批量写这条数据时出错, dataId=" + dataId + ",group=" + group + ",content=" + content, e);
                 // 出现异常, 设置异常状态码
                 configInfoEx.setStatus(Constants.BATCH_OP_ERROR);
@@ -422,8 +410,7 @@ public class AdminController {
         String json = null;
         try {
             json = JSONUtils.serializeObject(configInfoExList);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("批量写, 结果序列化出错, json=" + json, e);
         }
         modelMap.addAttribute("json", json);
@@ -442,7 +429,7 @@ public class AdminController {
 
     @RequestMapping(params = "method=addUser", method = RequestMethod.POST)
     public String addUser(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("userName") String userName, @RequestParam("password") String password, ModelMap modelMap) {
+                          @RequestParam("userName") String userName, @RequestParam("password") String password, ModelMap modelMap) {
         if (StringUtils.isBlank(userName) || DiamondUtils.hasInvalidChar(userName.trim())) {
             modelMap.addAttribute("message", "无效的用户名");
             return listUser(request, response, modelMap);
@@ -461,15 +448,14 @@ public class AdminController {
 
     @RequestMapping(params = "method=deleteUser", method = RequestMethod.GET)
     public String deleteUser(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("userName") String userName, ModelMap modelMap) {
+                             @RequestParam("userName") String userName, ModelMap modelMap) {
         if (StringUtils.isBlank(userName) || DiamondUtils.hasInvalidChar(userName.trim())) {
             modelMap.addAttribute("message", "无效的用户名");
             return listUser(request, response, modelMap);
         }
         if (this.adminService.removeUser(userName)) {
             modelMap.addAttribute("message", "删除成功!");
-        }
-        else {
+        } else {
             modelMap.addAttribute("message", "删除失败!");
         }
         return listUser(request, response, modelMap);
@@ -478,7 +464,7 @@ public class AdminController {
 
     @RequestMapping(params = "method=changePassword", method = RequestMethod.GET)
     public String changePassword(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("userName") String userName, @RequestParam("password") String password, ModelMap modelMap) {
+                                 @RequestParam("userName") String userName, @RequestParam("password") String password, ModelMap modelMap) {
 
         userName = userName.trim();
         password = password.trim();
@@ -493,8 +479,7 @@ public class AdminController {
         }
         if (this.adminService.updatePassword(userName, password)) {
             modelMap.addAttribute("message", "更改成功,下次登录请用新密码！");
-        }
-        else {
+        } else {
             modelMap.addAttribute("message", "更改失败!");
         }
         return listUser(request, response, modelMap);
@@ -522,7 +507,7 @@ public class AdminController {
 
     /**
      * 重新文件加载用户信息
-     * 
+     *
      * @param modelMap
      * @return
      */

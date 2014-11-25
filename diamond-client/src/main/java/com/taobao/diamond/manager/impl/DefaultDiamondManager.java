@@ -9,28 +9,26 @@
  */
 package com.taobao.diamond.manager.impl;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Properties;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.taobao.diamond.client.DiamondConfigure;
 import com.taobao.diamond.client.DiamondSubscriber;
 import com.taobao.diamond.client.impl.DefaultSubscriberListener;
 import com.taobao.diamond.client.impl.DiamondClientFactory;
 import com.taobao.diamond.manager.DiamondManager;
 import com.taobao.diamond.manager.ManagerListener;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Properties;
 
 
 /**
  * 需要注意的是：一个JVM中一个DataID只能对应一个DiamondManager
- * 
+ *
  * @author aoqiong
- * 
  */
 public class DefaultDiamondManager implements DiamondManager {
 
@@ -55,7 +53,7 @@ public class DefaultDiamondManager implements DiamondManager {
 
         this.managerListeners.add(managerListener);
         ((DefaultSubscriberListener) diamondSubscriber.getSubscriberListener()).addManagerListeners(this.dataId,
-            this.group, this.managerListeners);
+                this.group, this.managerListeners);
         diamondSubscriber.addDataId(this.dataId, this.group);
         diamondSubscriber.start();
 
@@ -69,7 +67,7 @@ public class DefaultDiamondManager implements DiamondManager {
 
     /**
      * 使用指定的集群类型clusterType
-     * 
+     *
      * @param group
      * @param dataId
      * @param managerListenerList
@@ -83,7 +81,7 @@ public class DefaultDiamondManager implements DiamondManager {
 
         this.managerListeners.addAll(managerListenerList);
         ((DefaultSubscriberListener) diamondSubscriber.getSubscriberListener()).addManagerListeners(this.dataId,
-            this.group, this.managerListeners);
+                this.group, this.managerListeners);
         diamondSubscriber.addDataId(this.dataId, this.group);
         diamondSubscriber.start();
     }
@@ -94,9 +92,9 @@ public class DefaultDiamondManager implements DiamondManager {
         this.managerListeners.add(managerListener);
 
         ((DefaultSubscriberListener) diamondSubscriber.getSubscriberListener()).removeManagerListeners(this.dataId,
-            this.group);
+                this.group);
         ((DefaultSubscriberListener) diamondSubscriber.getSubscriberListener()).addManagerListeners(this.dataId,
-            this.group, this.managerListeners);
+                this.group, this.managerListeners);
     }
 
 
@@ -105,7 +103,7 @@ public class DefaultDiamondManager implements DiamondManager {
          * 因为同一个DataID只能对应一个MnanagerListener，所以，关闭时一次性关闭所有ManagerListener即可
          */
         ((DefaultSubscriberListener) diamondSubscriber.getSubscriberListener()).removeManagerListeners(this.dataId,
-            this.group);
+                this.group);
 
         diamondSubscriber.removeDataId(dataId, group);
         if (diamondSubscriber.getDataIds().size() == 0) {
@@ -136,8 +134,7 @@ public class DefaultDiamondManager implements DiamondManager {
         try {
             properties.load(new StringReader(configInfo));
             return properties;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             log.warn("装载properties失败：" + configInfo, e);
             throw new RuntimeException("装载properties失败：" + configInfo, e);
         }
@@ -150,8 +147,7 @@ public class DefaultDiamondManager implements DiamondManager {
         try {
             properties.load(new StringReader(configInfo));
             return properties;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             log.warn("装载properties失败：" + configInfo, e);
             throw new RuntimeException("装载properties失败：" + configInfo, e);
         }
@@ -163,9 +159,9 @@ public class DefaultDiamondManager implements DiamondManager {
         this.managerListeners.addAll(managerListenerList);
 
         ((DefaultSubscriberListener) diamondSubscriber.getSubscriberListener()).removeManagerListeners(this.dataId,
-            this.group);
+                this.group);
         ((DefaultSubscriberListener) diamondSubscriber.getSubscriberListener()).addManagerListeners(this.dataId,
-            this.group, this.managerListeners);
+                this.group, this.managerListeners);
     }
 
 
@@ -185,8 +181,7 @@ public class DefaultDiamondManager implements DiamondManager {
         try {
             properties.load(new StringReader(configInfo));
             return properties;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             log.warn("装载properties失败：" + configInfo, e);
             throw new RuntimeException("装载properties失败：" + configInfo, e);
         }

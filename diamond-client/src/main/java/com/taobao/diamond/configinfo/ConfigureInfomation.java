@@ -14,14 +14,13 @@ import java.io.Serializable;
 
 /**
  * 配置信息的类
- * 
+ *
  * @author aoqiong
- * 
  */
 public class ConfigureInfomation implements Serializable {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 6684264073344815420L;
 
@@ -83,20 +82,17 @@ public class ConfigureInfomation implements Serializable {
         if (ConfigureInfomation == null) {
             if (other.ConfigureInfomation != null)
                 return false;
-        }
-        else if (!ConfigureInfomation.equals(other.ConfigureInfomation))
+        } else if (!ConfigureInfomation.equals(other.ConfigureInfomation))
             return false;
         if (dataId == null) {
             if (other.dataId != null)
                 return false;
-        }
-        else if (!dataId.equals(other.dataId))
+        } else if (!dataId.equals(other.dataId))
             return false;
         if (group == null) {
             if (other.group != null)
                 return false;
-        }
-        else if (!group.equals(other.group))
+        } else if (!group.equals(other.group))
             return false;
         return true;
     }

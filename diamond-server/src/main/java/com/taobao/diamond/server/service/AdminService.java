@@ -9,6 +9,11 @@
  */
 package com.taobao.diamond.server.service;
 
+import com.taobao.diamond.utils.ResourceUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Service;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,16 +24,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.stereotype.Service;
-
-import com.taobao.diamond.utils.ResourceUtils;
-
 
 /**
  * 管理服务
- * 
+ *
  * @author boyan
  * @date 2010-5-5
  */
@@ -62,16 +61,13 @@ public class AdminService {
             url = ResourceUtils.getResourceURL("user.properties");
             in = new FileInputStream(url.getPath());
             tempProperties.load(in);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             log.error("加载user.properties文件失败", e);
-        }
-        finally {
+        } finally {
             if (in != null) {
                 try {
                     in.close();
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     log.error("关闭user.properties文件失败", e);
                 }
             }
@@ -105,17 +101,14 @@ public class AdminService {
             this.properties.store(out, "add user");
             out.flush();
             return true;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             log.error("保存user.properties文件失败", e);
             return false;
-        }
-        finally {
+        } finally {
             if (out != null) {
                 try {
                     out.close();
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     log.error("关闭user.properties文件失败", e);
                 }
             }

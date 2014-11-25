@@ -14,13 +14,13 @@ import java.util.Date;
 
 
 public class DiamondUtils {
-    static final char[] INVALID_CHAR = { ';', '&', '%', '#', '$', '@', ',', '*', '^', '~', '(', ')', '/', '\\', '|',
-                                        '+' };
+    static final char[] INVALID_CHAR = {';', '&', '%', '#', '$', '@', ',', '*', '^', '~', '(', ')', '/', '\\', '|',
+            '+'};
 
 
     /**
      * ÅÐ¶Ï×Ö·û´®ÊÇ·ñÓÐ¿Õ¸ñ
-     * 
+     *
      * @param str
      * @return
      */

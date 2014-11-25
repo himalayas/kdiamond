@@ -9,22 +9,17 @@
  */
 package com.taobao.diamond.io.watch;
 
-import java.util.Iterator;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
+import com.taobao.diamond.io.Path;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.taobao.diamond.io.Path;
+import java.util.Iterator;
+import java.util.concurrent.*;
 
 
 /**
  * Watch服务，为文件系统提供监视功能，当文件或者目录添加、删除或者更改的时候提供主动通知服务
- * 
+ *
  * @author boyan
  * @date 2010-5-4
  */
@@ -64,8 +59,7 @@ public final class WatchService {
                         changedKeys.add(key);
                         it.remove();
                     }
-                }
-                catch (Throwable t) {
+                } catch (Throwable t) {
                     log.error("检测WatchKey异常,key=" + key, t);
                 }
             }
@@ -75,7 +69,7 @@ public final class WatchService {
 
     /**
      * 注册目录
-     * 
+     *
      * @param root
      * @param events
      * @return
@@ -121,7 +115,7 @@ public final class WatchService {
 
     /**
      * 获取改变的WatchKey
-     * 
+     *
      * @return
      */
     public WatchKey poll() {
@@ -131,7 +125,7 @@ public final class WatchService {
 
     /**
      * 获取改变的WatchKey
-     * 
+     *
      * @return
      */
     public WatchKey poll(long timeout, TimeUnit unit) throws InterruptedException {
@@ -141,7 +135,7 @@ public final class WatchService {
 
     /**
      * 获取改变的WatchKey
-     * 
+     *
      * @return
      */
     public WatchKey take() throws InterruptedException {

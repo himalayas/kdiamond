@@ -2,9 +2,8 @@ package com.taobao.diamond.domain;
 
 /**
  * ConfigInfo的扩展类, 解决老版本的SDK与新版本的server由于反序列化字段错误而产生的不兼容问题
- * 
+ *
  * @author leiwen.zh
- * 
  */
 public class ConfigInfoEx extends ConfigInfo {
 
@@ -46,12 +45,12 @@ public class ConfigInfoEx extends ConfigInfo {
     }
 
 
-	@Override
-	public String toString() {
-		return "ConfigInfoEx [status=" + status + ", message=" + message
-				+ ", getDataId()=" + getDataId() + ", getGroup()=" + getGroup()
-				+ ", getContent()=" + getContent() + ", getMd5()=" + getMd5()
-				+ "]";
-	}
+    @Override
+    public String toString() {
+        return "ConfigInfoEx [status=" + status + ", message=" + message
+                + ", getDataId()=" + getDataId() + ", getGroup()=" + getGroup()
+                + ", getContent()=" + getContent() + ", getMd5()=" + getMd5()
+                + "]";
+    }
 
 }

@@ -11,16 +11,16 @@ package com.taobao.diamond.util;
 
 /**
  * 模糊查询时合成 sql的工具类
- * 
- * @filename PatternUtils.java
+ *
  * @author libinbin.pt
+ * @filename PatternUtils.java
  * @datetime 2010-7-23 上午11:42:58
  */
 public class PatternUtils {
 
     /**
      * 检查参数字符串中是否包含符号 '*'
-     * 
+     *
      * @param patternStr
      * @return 包含返回true, 否则返回false
      */
@@ -39,7 +39,7 @@ public class PatternUtils {
 
     /**
      * 替换掉所有的符号'*'为'%'
-     * 
+     *
      * @param sourcePattern
      * @return 返回替换后的字符串
      */

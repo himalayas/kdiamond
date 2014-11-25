@@ -11,7 +11,7 @@ package com.taobao.diamond.server.exception;
 
 /**
  * Service层的任何异常都包装成这个Runtime异常抛出
- * 
+ *
  * @author boyan
  * @date 2010-5-5
  */

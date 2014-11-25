@@ -17,9 +17,8 @@ package com.taobao.diamond.client;
  * 1.主动获取<br>
  * 2.定时获取<br>
  * Diamond客户端还支持相对远程配置信息而言，优先级更高的本地配置配置信息的获取（使用Properties或者xml）
- * 
+ *
  * @author aoqiong
- * 
  */
 public interface DiamondClientSub {
 

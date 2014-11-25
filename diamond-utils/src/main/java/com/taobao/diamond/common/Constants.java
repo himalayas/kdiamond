@@ -12,7 +12,7 @@ package com.taobao.diamond.common;
 public class Constants {
 
     public static final String DEFAULT_GROUP = "DEFAULT_GROUP";
-    
+
     public static final String BASE_DIR = "config-data";
 
     public static final String DEFAULT_DOMAINNAME = "kdiamond.kuaidadi.kd";
@@ -45,15 +45,15 @@ public class Constants {
 
     public static final String SPACING_INTERVAL = "client-spacing-interval";
 
-    public static final int POLLING_INTERVAL_TIME = 15;// √Î
+    public static final int POLLING_INTERVAL_TIME = 5;// √Î
 
-    public static final int ONCE_TIMEOUT = 2000;// ∫¡√Î
+    public static final int ONCE_TIMEOUT = 1000;// ∫¡√Î
 
-    public static final int CONN_TIMEOUT = 2000;// ∫¡√Î
+    public static final int CONN_TIMEOUT = 3000;// ∫¡√Î
 
-    public static final int RECV_WAIT_TIMEOUT = ONCE_TIMEOUT * 5;// ∫¡√Î
+    public static final int RECV_WAIT_TIMEOUT = ONCE_TIMEOUT * 3;// ∫¡√Î
 
-    public static final String HTTP_URI_FILE = "/url";
+    public static final String HTTP_URI_FILE = "/diamond-server/diamond";
 
     public static final String CONFIG_HTTP_URI_FILE = "/diamond-server/diamond";
 
@@ -68,7 +68,7 @@ public class Constants {
     public static final String DEFAULT_USERNAME = "kuaidi";
 
     public static final String DEFAULT_PASSWORD = "kuaidi";
-    
+
     /*
      * ≈˙¡ø≤Ÿ◊˜ ±, µ•Ãı ˝æ›µƒ◊¥Ã¨¬Î
      */

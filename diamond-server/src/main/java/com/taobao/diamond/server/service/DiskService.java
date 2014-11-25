@@ -1,12 +1,8 @@
 package com.taobao.diamond.server.service;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.servlet.ServletContext;
-
+import com.taobao.diamond.common.Constants;
+import com.taobao.diamond.domain.ConfigInfo;
+import com.taobao.diamond.server.exception.ConfigServiceException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,14 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.WebUtils;
 
-import com.taobao.diamond.common.Constants;
-import com.taobao.diamond.domain.ConfigInfo;
-import com.taobao.diamond.server.exception.ConfigServiceException;
+import javax.servlet.ServletContext;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
  * 磁盘操作服务
- * 
+ *
  * @author boyan
  * @date 2010-5-4
  */
@@ -52,7 +50,7 @@ public class DiskService {
 
     /**
      * 单元测试用
-     * 
+     *
      * @return
      */
     public ConcurrentHashMap<String, Boolean> getModifyMarkCache() {
@@ -62,7 +60,7 @@ public class DiskService {
 
     /**
      * 获取配置文件路径, 单元测试用
-     * 
+     *
      * @param dataId
      * @param group
      * @return
@@ -93,13 +91,11 @@ public class DiskService {
                 FileUtils.writeStringToFile(tempFile, content, Constants.ENCODE);
                 // 用临时文件覆盖目标文件, 完成本次磁盘操作
                 FileUtils.copyFile(tempFile, targetFile);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 String errorMsg = "save disk error, dataId=" + dataId + ",group=" + group;
                 log.error(errorMsg, e);
                 throw new ConfigServiceException(errorMsg, e);
-            }
-            finally {
+            } finally {
                 // 删除临时文件
                 if (tempFile != null && tempFile.exists()) {
                     FileUtils.deleteQuietly(tempFile);
@@ -107,8 +103,7 @@ public class DiskService {
                 // 清除标记
                 this.modifyMarkCache.remove(cacheKey);
             }
-        }
-        else {
+        } else {
             throw new ConfigServiceException("config info is being motified, dataId=" + dataId + ",group=" + group);
         }
 
@@ -122,10 +117,9 @@ public class DiskService {
 
     /**
      * 生成缓存key，用于标记文件是否正在被修改
-     * 
+     *
      * @param group
      * @param dataId
-     * 
      * @return
      */
     public final String generateCacheKey(String group, String dataId) {
@@ -154,18 +148,15 @@ public class DiskService {
                 }
 
                 FileUtils.deleteQuietly(dataFile);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 String errorMsg = "delete config info error, dataId=" + dataId + ",group=" + group;
                 log.error(errorMsg, e);
                 throw new ConfigServiceException(errorMsg, e);
-            }
-            finally {
+            } finally {
                 // 清除标记
                 this.modifyMarkCache.remove(cacheKey);
             }
-        }
-        else {
+        } else {
             throw new ConfigServiceException("config info is being motified, dataId=" + dataId + ",group=" + group);
         }
     }

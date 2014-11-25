@@ -9,43 +9,6 @@
  */
 package com.taobao.diamond.client.impl;
 
-import static com.taobao.diamond.common.Constants.LINE_SEPARATOR;
-import static com.taobao.diamond.common.Constants.WORD_SEPARATOR;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URLDecoder;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.zip.GZIPInputStream;
-
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
-import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.taobao.diamond.client.DiamondConfigure;
 import com.taobao.diamond.client.DiamondSubscriber;
 import com.taobao.diamond.client.SubscriberListener;
@@ -57,15 +20,39 @@ import com.taobao.diamond.configinfo.CacheData;
 import com.taobao.diamond.configinfo.ConfigureInfomation;
 import com.taobao.diamond.md5.MD5;
 import com.taobao.diamond.mockserver.MockServer;
-import com.taobao.diamond.utils.LoggerInit;
 import com.taobao.diamond.utils.SimpleCache;
+import org.apache.commons.httpclient.*;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
+import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.zip.GZIPInputStream;
+
+import static com.taobao.diamond.common.Constants.LINE_SEPARATOR;
+import static com.taobao.diamond.common.Constants.WORD_SEPARATOR;
 
 
 /**
  * 缺省的DiamondSubscriber
- * 
+ *
  * @author aoqiong
- * 
  */
 class DefaultDiamondSubscriber implements DiamondSubscriber {
     // 本地文件监视目录
@@ -82,16 +69,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
     private static final int SC_NOT_FOUND = 404;
 
     private static final int SC_SERVICE_UNAVAILABLE = 503;
-
-    static {
-        try {
-            LoggerInit.initLogFromBizLog();
-        }
-        catch (Throwable _) {
-            log.error(_);
-        }
-    }
-    private final Log dataLog = LogFactory.getLog(LoggerInit.LOG_NAME_CONFIG_DATA);
+    private final Log dataLog = LogFactory.getLog(DefaultDiamondSubscriber.class);
 
     private final ConcurrentHashMap<String/* DataID */, ConcurrentHashMap<String/* Group */, CacheData>> cache =
             new ConcurrentHashMap<String, ConcurrentHashMap<String, CacheData>>();
@@ -130,9 +108,9 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
      * 2.启动定时线程定时获取所有的DataId配置信息<br>
      */
     public synchronized void start() {
-        log.info("------------start----------------");
+        System.out.println("------------start----------------");
         if (isRun) {
-           log.info("running...");
+            System.out.println("running...");
             return;
         }
 
@@ -159,8 +137,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
         if (MockServer.isTestMode()) {
             bFirstCheck = false;
-        }
-        else {
+        } else {
             // 设置轮询间隔时间
             this.diamondConfigure.setPollingIntervalTime(Constants.POLLING_INTERVAL_TIME);
         }
@@ -168,7 +145,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
         rotateCheckConfigInfo();
 
         addShutdownHook();
-        log.info("------------end----------------");
+        System.out.println("------------end----------------");
     }
 
 
@@ -188,6 +165,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
             @Override
             public void run() {
                 // 关闭单例订阅者
+                System.out.println("关闭单例订阅者");
                 close();
             }
 
@@ -201,7 +179,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
         }
         HostConfiguration hostConfiguration = new HostConfiguration();
         hostConfiguration.setHost(diamondConfigure.getDomainNameList().get(this.domainNamePos.get()),
-            diamondConfigure.getPort());
+                diamondConfigure.getPort());
 
         MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
         connectionManager.closeIdleConnections(diamondConfigure.getPollingIntervalTime() * 4000);
@@ -223,7 +201,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
     /**
      * 仅供测试，切勿调用
-     * 
+     *
      * @param pos
      */
     void setDomainNamesPos(int pos) {
@@ -245,12 +223,10 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
                     checkLocalConfigInfo();
                     checkDiamondServerConfigInfo();
                     checkSnapshot();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     log.error("循环探测发生异常", e);
-                }
-                finally {
+                } finally {
                     rotateCheckConfigInfo();
                 }
             }
@@ -262,7 +238,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
     /**
      * 向DiamondServer请求dataId对应的配置信息，并将结果抛给客户的监听器
-     * 
+     *
      * @param dataId
      */
     private void receiveConfigInfo(final CacheData cacheData) {
@@ -276,7 +252,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
                 try {
                     String configInfo =
                             getConfigureInfomation(cacheData.getDataId(), cacheData.getGroup(),
-                                diamondConfigure.getReceiveWaitTime(), true);
+                                    diamondConfigure.getReceiveWaitTime(), true);
                     if (null == configInfo) {
                         return;
                     }
@@ -287,8 +263,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
                     }
 
                     popConfigInfo(cacheData, configInfo);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     log.error("向Diamond服务器索要配置信息的过程抛异常", e);
                 }
             }
@@ -345,7 +320,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
     private void checkLocalConfigInfo() {
         for (Entry<String/* dataId */, ConcurrentHashMap<String/* group */, CacheData>> cacheDatasEntry : cache
-            .entrySet()) {
+                .entrySet()) {
             ConcurrentHashMap<String, CacheData> cacheDatas = cacheDatasEntry.getValue();
             if (null == cacheDatas) {
                 continue;
@@ -364,8 +339,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
                     if (cacheData.isUseLocalConfigInfo()) {
                         continue;
                     }
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     log.error("向本地索要配置信息的过程抛异常", e);
                 }
             }
@@ -375,7 +349,6 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
     /**
      * 将订阅信息抛给客户的监听器
-     * 
      */
     void popConfigInfo(final CacheData cacheData, final String configInfo) {
         final ConfigureInfomation configureInfomation = new ConfigureInfomation();
@@ -391,19 +364,16 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
                     try {
                         subscriberListener.receiveConfigInfo(configureInfomation);
                         saveSnapshot(dataId, group, configInfo);
-                    }
-                    catch (Throwable t) {
+                    } catch (Throwable t) {
                         log.error("配置信息监听器中有异常，group为：" + group + ", dataId为：" + dataId, t);
                     }
                 }
             });
-        }
-        else {
+        } else {
             try {
                 subscriberListener.receiveConfigInfo(configureInfomation);
                 saveSnapshot(dataId, group, configInfo);
-            }
-            catch (Throwable t) {
+            } catch (Throwable t) {
                 log.error("配置信息监听器中有异常，group为：" + group + ", dataId为：" + dataId, t);
             }
         }
@@ -427,11 +397,8 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
 
     /**
-     * 
-     * @param waitTime
-     *            本次查询已经耗费的时间(已经查询的多次HTTP耗费的时间)
-     * @param timeout
-     *            本次查询总的可耗费时间(可供多次HTTP查询使用)
+     * @param waitTime 本次查询已经耗费的时间(已经查询的多次HTTP耗费的时间)
+     * @param timeout  本次查询总的可耗费时间(可供多次HTTP查询使用)
      * @return 本次HTTP查询能够使用的时间
      */
     long getOnceTimeOut(long waitTime, long timeout) {
@@ -472,8 +439,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
                 saveSnapshot(dataId, group, localConfig);
                 return localConfig;
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             log.error("获取本地配置文件出错", e);
         }
         // 获取本地配置失败，从网络取
@@ -490,8 +456,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
         if (config != null) {
             try {
                 this.snapshotConfigInfoProcessor.saveSnaptshot(dataId, group, config);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 log.error("保存snapshot出错,dataId=" + dataId + ",group=" + group, e);
             }
         }
@@ -505,8 +470,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
             if (result != null && result.length() > 0) {
                 return result;
             }
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             log.error(t.getMessage(), t);
         }
 
@@ -538,8 +502,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
                 cacheData.incrementFetchCountAndGet();
             }
             return config;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("获取snapshot出错， dataId=" + dataId + ",group=" + group, e);
             return null;
         }
@@ -547,12 +510,10 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
 
     /**
-     * 
      * @param dataId
      * @param group
      * @param timeout
-     * @param skipContentCache
-     *            是否使用本地的内容cache。主动get时会使用，有check触发的异步get不使用本地cache。
+     * @param skipContentCache 是否使用本地的内容cache。主动get时会使用，有check触发的异步get不使用本地cache。
      * @return
      */
     String getConfigureInfomation(String dataId, String group, long timeout, boolean skipContentCache) {
@@ -616,48 +577,44 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
                 switch (httpStatus) {
 
-                case SC_OK: {
-                    String result = getSuccess(dataId, group, cacheData, httpMethod);
-                    return result;
-                }
+                    case SC_OK: {
+                        String result = getSuccess(dataId, group, cacheData, httpMethod);
+                        return result;
+                    }
 
-                case SC_NOT_MODIFIED: {
-                    String result = getNotModified(dataId, cacheData, httpMethod);
-                    return result;
-                }
+                    case SC_NOT_MODIFIED: {
+                        String result = getNotModified(dataId, cacheData, httpMethod);
+                        return result;
+                    }
 
-                case SC_NOT_FOUND: {
-                    log.warn("没有找到DataID为:" + dataId + "对应的配置信息");
-                    cacheData.setMd5(Constants.NULL);
-                    this.snapshotConfigInfoProcessor.removeSnapshot(dataId, group);
-                    return null;
-                }
+                    case SC_NOT_FOUND: {
+                        log.warn("没有找到DataID为:" + dataId + "对应的配置信息");
+                        cacheData.setMd5(Constants.NULL);
+                        this.snapshotConfigInfoProcessor.removeSnapshot(dataId, group);
+                        return null;
+                    }
 
-                case SC_SERVICE_UNAVAILABLE: {
-                    rotateToNextDomain();
-                }
+                    case SC_SERVICE_UNAVAILABLE: {
+                        rotateToNextDomain();
+                    }
                     break;
 
-                default: {
-                    log.warn("HTTP State: " + httpStatus + ":" + httpClient.getState());
-                    rotateToNextDomain();
+                    default: {
+                        log.warn("HTTP State: " + httpStatus + ":" + httpClient.getState());
+                        rotateToNextDomain();
+                    }
                 }
-                }
-            }
-            catch (HttpException e) {
+            } catch (HttpException e) {
                 log.error("获取配置信息Http异常", e);
                 rotateToNextDomain();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
 
                 log.error("获取配置信息IO异常", e);
                 rotateToNextDomain();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 log.error("未知异常", e);
                 rotateToNextDomain();
-            }
-            finally {
+            } finally {
                 httpMethod.releaseConnection();
             }
         }
@@ -765,7 +722,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
 
     private void configureHttpMethod(boolean skipContentCache, CacheData cacheData, long onceTimeOut,
-            HttpMethod httpMethod) {
+                                     HttpMethod httpMethod) {
         if (skipContentCache && null != cacheData) {
             if (null != cacheData.getLastModifiedHeader() && Constants.NULL != cacheData.getLastModifiedHeader()) {
                 httpMethod.addRequestHeader(Constants.IF_MODIFIED_SINCE, cacheData.getLastModifiedHeader());
@@ -783,7 +740,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
         // ///////////////////////
         httpMethod.setParams(params);
         httpClient.getHostConfiguration().setHost(diamondConfigure.getDomainNameList().get(this.domainNamePos.get()),
-            diamondConfigure.getPort());
+                diamondConfigure.getPort());
     }
 
 
@@ -795,7 +752,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
     /**
      * 从DiamondServer获取值变化了的DataID列表
-     * 
+     *
      * @param timeout
      * @return
      */
@@ -833,41 +790,37 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
             try {
                 httpClient.getHostConfiguration()
-                    .setHost(diamondConfigure.getDomainNameList().get(this.domainNamePos.get()),
-                        this.diamondConfigure.getPort());
+                        .setHost(diamondConfigure.getDomainNameList().get(this.domainNamePos.get()),
+                                this.diamondConfigure.getPort());
 
                 int httpStatus = httpClient.executeMethod(postMethod);
 
                 switch (httpStatus) {
-                case SC_OK: {
-                    Set<String> result = getUpdateDataIds(postMethod);
-                    return result;
-                }
+                    case SC_OK: {
+                        Set<String> result = getUpdateDataIds(postMethod);
+                        return result;
+                    }
 
-                case SC_SERVICE_UNAVAILABLE: {
-                    rotateToNextDomain();
-                }
+                    case SC_SERVICE_UNAVAILABLE: {
+                        rotateToNextDomain();
+                    }
                     break;
 
-                default: {
-                    log.warn("获取修改过的DataID列表的请求回应的HTTP State: " + httpStatus);
-                    rotateToNextDomain();
+                    default: {
+                        log.warn("获取修改过的DataID列表的请求回应的HTTP State: " + httpStatus);
+                        rotateToNextDomain();
+                    }
                 }
-                }
-            }
-            catch (HttpException e) {
+            } catch (HttpException e) {
                 log.error("获取配置信息Http异常", e);
                 rotateToNextDomain();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 log.error("获取配置信息IO异常", e);
                 rotateToNextDomain();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 log.error("未知异常", e);
                 rotateToNextDomain();
-            }
-            finally {
+            } finally {
                 postMethod.releaseConnection();
             }
         }
@@ -892,7 +845,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
     /**
      * 获取探测更新的DataID的请求字符串
-     * 
+     *
      * @param localModifySet
      * @return
      */
@@ -914,16 +867,14 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
                     if (null != cacheDataEntry.getValue().getGroup()
                             && Constants.NULL != cacheDataEntry.getValue().getGroup()) {
                         probeModifyBuilder.append(cacheDataEntry.getValue().getGroup()).append(WORD_SEPARATOR);
-                    }
-                    else {
+                    } else {
                         probeModifyBuilder.append(WORD_SEPARATOR);
                     }
 
                     if (null != cacheDataEntry.getValue().getMd5()
                             && Constants.NULL != cacheDataEntry.getValue().getMd5()) {
                         probeModifyBuilder.append(cacheDataEntry.getValue().getMd5()).append(LINE_SEPARATOR);
-                    }
-                    else {
+                    } else {
                         probeModifyBuilder.append(LINE_SEPARATOR);
                     }
                 }
@@ -952,7 +903,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
     /**
      * 获取查询Uri的String
-     * 
+     *
      * @param dataId
      * @param group
      * @return
@@ -972,7 +923,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
     /**
      * 设置新的消息轮询间隔时间
-     * 
+     *
      * @param httpMethod
      */
     void changeSpacingInterval(HttpMethod httpMethod) {
@@ -980,8 +931,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
         if (spacingIntervalHeaders.length >= 1) {
             try {
                 diamondConfigure.setPollingIntervalTime(Integer.parseInt(spacingIntervalHeaders[0].getValue()));
-            }
-            catch (RuntimeException e) {
+            } catch (RuntimeException e) {
                 log.error("设置下次间隔时间失败", e);
             }
         }
@@ -990,7 +940,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
     /**
      * 获取Response的配置信息
-     * 
+     *
      * @param httpMethod
      * @return
      */
@@ -1012,44 +962,36 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
                 while ((readlen = br.read(buffer, 0, 4096)) != -1) {
                     contentBuilder.append(buffer, 0, readlen);
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 log.error("解压缩失败", e);
-            }
-            finally {
+            } finally {
                 try {
                     br.close();
-                }
-                catch (Exception e1) {
+                } catch (Exception e1) {
                     // ignore
                 }
                 try {
                     isr.close();
-                }
-                catch (Exception e1) {
+                } catch (Exception e1) {
                     // ignore
                 }
                 try {
                     gzin.close();
-                }
-                catch (Exception e1) {
+                } catch (Exception e1) {
                     // ignore
                 }
                 try {
                     is.close();
-                }
-                catch (Exception e1) {
+                } catch (Exception e1) {
                     // ignore
                 }
             }
-        }
-        else {
+        } else {
             // 处理没有被压缩过的配置信息的逻辑
             String content = null;
             try {
                 content = httpMethod.getResponseBodyAsString();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 log.error("获取配置信息失败", e);
             }
             if (null == content) {
@@ -1066,8 +1008,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
         try {
             String modifiedDataIdsString = httpMethod.getResponseBodyAsString();
             return convertStringToSet(modifiedDataIdsString);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
 
         }
         return modifiedDataIdSet;
@@ -1090,16 +1031,14 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
         try {
             modifiedDataIdsString = URLDecoder.decode(modifiedDataIdsString, "UTF-8");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("解码modifiedDataIdsString出错", e);
         }
 
         if (log.isInfoEnabled() && modifiedDataIdsString != null) {
             if (modifiedDataIdsString.startsWith("OK")) {
                 log.debug("探测的返回结果:" + modifiedDataIdsString);
-            }
-            else {
+            } else {
                 log.info("探测到数据变化:" + modifiedDataIdsString);
             }
         }
@@ -1116,7 +1055,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
     /**
      * 检测配置信息内容与MD5码是否一致
-     * 
+     *
      * @param configInfo
      * @param md5
      * @return
@@ -1129,7 +1068,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
     /**
      * 查看是否为压缩的内容
-     * 
+     *
      * @param httpMethod
      * @return
      */
@@ -1167,8 +1106,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
             ConcurrentHashMap<String, CacheData> oldCacheDatas = this.cache.putIfAbsent(dataId, newCacheDatas);
             if (null != oldCacheDatas) {
                 cacheDatas = oldCacheDatas;
-            }
-            else {
+            } else {
                 cacheDatas = newCacheDatas;
             }
         }
@@ -1252,8 +1190,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
     public void setDiamondConfigure(DiamondConfigure diamondConfigure) {
         if (!isRun) {
             this.diamondConfigure = diamondConfigure;
-        }
-        else {
+        } else {
             // 运行之后，某些参数无法更新
             copyDiamondConfigure(diamondConfigure);
         }

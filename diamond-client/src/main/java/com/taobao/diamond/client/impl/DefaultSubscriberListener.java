@@ -1,5 +1,13 @@
 package com.taobao.diamond.client.impl;
 
+import com.taobao.diamond.client.SubscriberListener;
+import com.taobao.diamond.common.Constants;
+import com.taobao.diamond.configinfo.ConfigureInfomation;
+import com.taobao.diamond.manager.ManagerListener;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -7,27 +15,16 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executor;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import com.taobao.diamond.client.SubscriberListener;
-import com.taobao.diamond.common.Constants;
-import com.taobao.diamond.configinfo.ConfigureInfomation;
-import com.taobao.diamond.manager.ManagerListener;
-import com.taobao.diamond.utils.LoggerInit;
-
 
 /**
  * 业务监听器的聚集。
- * 
+ *
  * @author leiwen.zh
- * 
  */
 public class DefaultSubscriberListener implements SubscriberListener {
 
     // 回调日志单独记录
-    private static final Log dataLog = LogFactory.getLog(LoggerInit.LOG_NAME_CONFIG_DATA);
+    private static final Log dataLog = LogFactory.getLog(DefaultSubscriberListener.class);
 
     private final ConcurrentMap<String/* dataId + group */, CopyOnWriteArrayList<ManagerListener>/* listeners */> allListeners =
             new ConcurrentHashMap<String, CopyOnWriteArrayList<ManagerListener>>();
@@ -56,8 +53,7 @@ public class DefaultSubscriberListener implements SubscriberListener {
         for (ManagerListener listener : listeners) {
             try {
                 notifyListener(configureInfomation, listener);
-            }
-            catch (Throwable t) {
+            } catch (Throwable t) {
                 dataLog.error("call listener error, dataId=" + dataId + ", group=" + group, t);
             }
         }
@@ -80,8 +76,7 @@ public class DefaultSubscriberListener implements SubscriberListener {
             public void run() {
                 try {
                     listener.receiveConfigInfo(content);
-                }
-                catch (Throwable t) {
+                } catch (Throwable t) {
                     dataLog.error(t.getMessage(), t);
                 }
             }
@@ -89,8 +84,7 @@ public class DefaultSubscriberListener implements SubscriberListener {
 
         if (null != listener.getExecutor()) {
             listener.getExecutor().execute(job);
-        }
-        else {
+        } else {
             job.run();
         }
     }
@@ -118,7 +112,7 @@ public class DefaultSubscriberListener implements SubscriberListener {
 
     /**
      * 删除一个DataID对应的所有的ManagerListeners
-     * 
+     *
      * @param dataId
      */
     public void removeManagerListeners(String dataId, String group) {
@@ -133,7 +127,7 @@ public class DefaultSubscriberListener implements SubscriberListener {
 
     /**
      * 添加一个DataID对应的一些ManagerListener
-     * 
+     *
      * @param dataId
      * @param addListeners
      */

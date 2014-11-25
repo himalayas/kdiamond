@@ -9,20 +9,16 @@
  */
 package com.taobao.diamond.io.watch;
 
-import java.io.File;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import com.taobao.diamond.io.Path;
 import com.taobao.diamond.io.watch.util.PathNode;
+
+import java.io.File;
+import java.util.*;
 
 
 /**
  * WatchKey，表示一个注册的的凭证
- * 
+ *
  * @author boyan
  * @date 2010-5-4
  */
@@ -40,7 +36,7 @@ public class WatchKey {
 
 
     public WatchKey(final Path path, final WatchService watcher, boolean fireCreatedEventOnIndex,
-            WatchEvent.Kind<?>... events) {
+                    WatchEvent.Kind<?>... events) {
         valid = true;
         this.watcher = watcher;
         // 建立内存索引
@@ -58,7 +54,7 @@ public class WatchKey {
 
     /**
      * 索引目录
-     * 
+     *
      * @param node
      */
     private void index(PathNode node, boolean fireCreatedEventOnIndex, LinkedList<WatchEvent<?>> changedEvents) {
@@ -110,7 +106,7 @@ public class WatchKey {
 
     /**
      * 检测是否有变化
-     * 
+     *
      * @return
      */
     boolean check() {
@@ -122,8 +118,7 @@ public class WatchKey {
         if (check(root, list)) {
             this.changedEvents = list;
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -139,12 +134,10 @@ public class WatchKey {
                 else {
                     return checkNodeChildren(node, changedEvents, nodeNewFile);
                 }
-            }
-            else {
+            } else {
                 return checkNodeChildren(node, changedEvents, nodeNewFile);
             }
-        }
-        else
+        } else
             throw new IllegalStateException("PathNode没有path");
     }
 
@@ -182,21 +175,21 @@ public class WatchKey {
 
         // 查看是否有新增文件
         File[] newChildFiles = nodeNewFile.listFiles();
-        if(newChildFiles!=null)
-        for (File newChildFile : newChildFiles) {
-            if (!childNameSet.contains(newChildFile.getName())
-                    && filterSet.contains(StandardWatchEventKind.ENTRY_CREATE)) {
-                changed = true;
-                Path newChildPath = new Path(newChildFile);
-                changedEvents.add(new WatchEvent<Path>(StandardWatchEventKind.ENTRY_CREATE, 1, newChildPath));
-                PathNode newSubNode = new PathNode(newChildPath, false);
-                node.addChild(newSubNode);// 新增子节点
-                // 如果是目录，递归调用
-                if (newChildFile.isDirectory()) {
-                    checkNodeChildren(newSubNode, changedEvents, newChildFile);
+        if (newChildFiles != null)
+            for (File newChildFile : newChildFiles) {
+                if (!childNameSet.contains(newChildFile.getName())
+                        && filterSet.contains(StandardWatchEventKind.ENTRY_CREATE)) {
+                    changed = true;
+                    Path newChildPath = new Path(newChildFile);
+                    changedEvents.add(new WatchEvent<Path>(StandardWatchEventKind.ENTRY_CREATE, 1, newChildPath));
+                    PathNode newSubNode = new PathNode(newChildPath, false);
+                    node.addChild(newSubNode);// 新增子节点
+                    // 如果是目录，递归调用
+                    if (newChildFile.isDirectory()) {
+                        checkNodeChildren(newSubNode, changedEvents, newChildFile);
+                    }
                 }
             }
-        }
         return changed;
     }
 

@@ -1,22 +1,20 @@
 package com.taobao.diamond.server.service;
 
+import com.taobao.diamond.server.utils.SystemConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.taobao.diamond.server.utils.SystemConfig;
-
 
 /**
  * 定时任务服务
- * 
+ *
  * @author boyan
  */
 @Service
@@ -52,7 +50,7 @@ public class TimerTaskService {
         DumpConfigInfoTask dumpTask = new DumpConfigInfoTask(this);
         dumpTask.run();
         this.scheduledExecutorService.scheduleWithFixedDelay(dumpTask, SystemConfig.getDumpConfigInterval(),
-            SystemConfig.getDumpConfigInterval(), TimeUnit.SECONDS);
+                SystemConfig.getDumpConfigInterval(), TimeUnit.SECONDS);
     }
 
 

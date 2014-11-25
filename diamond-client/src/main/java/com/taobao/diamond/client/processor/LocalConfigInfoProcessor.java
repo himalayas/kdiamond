@@ -9,18 +9,6 @@
  */
 package com.taobao.diamond.client.processor;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.taobao.diamond.common.Constants;
 import com.taobao.diamond.configinfo.CacheData;
 import com.taobao.diamond.io.FileSystem;
@@ -30,11 +18,23 @@ import com.taobao.diamond.io.watch.WatchEvent;
 import com.taobao.diamond.io.watch.WatchKey;
 import com.taobao.diamond.io.watch.WatchService;
 import com.taobao.diamond.utils.FileUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 
 public class LocalConfigInfoProcessor {
     private static final Log log = LogFactory.getLog(LocalConfigInfoProcessor.class);
-    private ScheduledExecutorService singleExecutor = Executors.newSingleThreadScheduledExecutor();;
+    private ScheduledExecutorService singleExecutor = Executors.newSingleThreadScheduledExecutor();
+    ;
 
     private final Map<String/* filePath */, Long/* version */> existFiles = new HashMap<String, Long>();
 
@@ -44,10 +44,9 @@ public class LocalConfigInfoProcessor {
 
     /**
      * 获取本地配置
-     * 
+     *
      * @param cacheData
-     * @param force
-     *            强制获取，在没有变更的时候不返回null
+     * @param force     强制获取，在没有变更的时候不返回null
      * @return
      * @throws IOException
      */
@@ -82,8 +81,7 @@ public class LocalConfigInfoProcessor {
             }
 
             return content;
-        }
-        else {
+        } else {
             cacheData.setUseLocalConfigInfo(true);
 
             if (log.isInfoEnabled()) {
@@ -98,7 +96,7 @@ public class LocalConfigInfoProcessor {
     String getFilePath(String dataId, String group) {
         StringBuilder filePathBuilder = new StringBuilder();
         filePathBuilder.append(rootPath).append("/").append(Constants.BASE_DIR).append("/").append(group).append("/")
-            .append(dataId);
+                .append(dataId);
         File file = new File(filePathBuilder.toString());
         return file.getAbsolutePath();
     }
@@ -122,8 +120,7 @@ public class LocalConfigInfoProcessor {
         try {
             File flie = new File(rootPath);
             flie.mkdir();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
         }
     }
 
@@ -144,7 +141,7 @@ public class LocalConfigInfoProcessor {
         Path path = new Path(new File(filePath));
         // 注册事件
         watcher.register(path, true, StandardWatchEventKind.ENTRY_CREATE, StandardWatchEventKind.ENTRY_DELETE,
-            StandardWatchEventKind.ENTRY_MODIFY);
+                StandardWatchEventKind.ENTRY_MODIFY);
         // 第一次运行，主动check
         checkAtFirst(watcher);
         singleExecutor.execute(new Runnable() {
@@ -156,8 +153,7 @@ public class LocalConfigInfoProcessor {
                     WatchKey key;
                     try {
                         key = watcher.take();
-                    }
-                    catch (InterruptedException x) {
+                    } catch (InterruptedException x) {
                         continue;
                     }
                     // reset，如果无效，跳出循环,无效可能是监听的目录被删除
@@ -186,11 +182,11 @@ public class LocalConfigInfoProcessor {
 
     /**
      * 处理触发的事件
-     * 
+     *
      * @param key
      * @return
      */
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings({"unchecked"})
     private boolean processEvents(WatchKey key) {
         /**
          * 获取事件集合
@@ -209,8 +205,7 @@ public class LocalConfigInfoProcessor {
                 String grandpaDir = null;
                 try {
                     grandpaDir = FileUtils.getGrandpaDir(realPath);
-                }
-                catch (Exception e1) {
+                } catch (Exception e1) {
 
                 }
                 if (!Constants.BASE_DIR.equals(grandpaDir)) {
@@ -221,13 +216,11 @@ public class LocalConfigInfoProcessor {
                 if (log.isInfoEnabled()) {
                     log.info(realPath + "文件被添加或更新");
                 }
-            }
-            else if (ev.kind() == StandardWatchEventKind.ENTRY_DELETE) {
+            } else if (ev.kind() == StandardWatchEventKind.ENTRY_DELETE) {
                 String grandpaDir = null;
                 try {
                     grandpaDir = FileUtils.getGrandpaDir(realPath);
-                }
-                catch (Exception e1) {
+                } catch (Exception e1) {
 
                 }
                 if (Constants.BASE_DIR.equals(grandpaDir)) {
@@ -236,8 +229,7 @@ public class LocalConfigInfoProcessor {
                     if (log.isInfoEnabled()) {
                         log.info(realPath + "文件被被删除");
                     }
-                }
-                else {
+                } else {
                     // 删除的是目录
                     Set<String> keySet = new HashSet<String>(existFiles.keySet());
                     for (String filePath : keySet) {

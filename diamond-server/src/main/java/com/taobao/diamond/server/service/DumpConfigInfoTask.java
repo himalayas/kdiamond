@@ -1,17 +1,16 @@
 package com.taobao.diamond.server.service;
 
-import java.io.IOException;
-
+import com.taobao.diamond.domain.ConfigInfo;
+import com.taobao.diamond.domain.Page;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.taobao.diamond.domain.ConfigInfo;
-import com.taobao.diamond.domain.Page;
+import java.io.IOException;
 
 
 /**
  * Dump配置信息任务
- * 
+ *
  * @author boyan
  * @date 2010-5-10
  */
@@ -45,8 +44,7 @@ public final class DumpConfigInfoTask implements Runnable {
                     }
                 }
             }
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             log.error("dump task run error", t);
         }
     }
@@ -61,10 +59,9 @@ public final class DumpConfigInfoTask implements Runnable {
                 // 写入磁盘，更新缓存
                 this.timerTaskService.getConfigService().updateMD5Cache(configInfo);
                 this.timerTaskService.getDiskService().saveToDisk(configInfo);
-            }
-            catch (Throwable t) {
+            } catch (Throwable t) {
                 log.error(
-                    "dump config info error, dataId=" + configInfo.getDataId() + ", group=" + configInfo.getGroup(), t);
+                        "dump config info error, dataId=" + configInfo.getDataId() + ", group=" + configInfo.getGroup(), t);
             }
 
         }
