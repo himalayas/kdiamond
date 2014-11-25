@@ -108,9 +108,9 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
      * 2.启动定时线程定时获取所有的DataId配置信息<br>
      */
     public synchronized void start() {
-        System.out.println("------------start----------------");
+        log.debug("------------start----------------");
         if (isRun) {
-            System.out.println("running...");
+            log.debug("running...");
             return;
         }
 
@@ -145,7 +145,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
         rotateCheckConfigInfo();
 
         addShutdownHook();
-        System.out.println("------------end----------------");
+        log.debug("------------end----------------");
     }
 
 
@@ -239,7 +239,6 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
     /**
      * 向DiamondServer请求dataId对应的配置信息，并将结果抛给客户的监听器
      *
-     * @param dataId
      */
     private void receiveConfigInfo(final CacheData cacheData) {
         scheduledExecutor.execute(new Runnable() {
@@ -543,9 +542,9 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
         long waitTime = 0;
 
         String uri = getUriString(dataId, group);
-        if (log.isInfoEnabled()) {
-            log.info(uri);
-        }
+//        if (log.isInfoEnabled()) {
+            log.info("----------------"+uri);
+//        }
 
         CacheData cacheData = getCacheData(dataId, group);
 
@@ -781,20 +780,20 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
             PostMethod postMethod = new PostMethod(Constants.HTTP_URI_FILE);
 
             postMethod.addParameter(Constants.PROBE_MODIFY_REQUEST, probeUpdateString);
+//            postMethod.setRequestHeader("Content-Type", "text/html;charset=UTF-8");
 
             // 设置HttpMethod的参数
             HttpMethodParams params = new HttpMethodParams();
             params.setSoTimeout((int) onceTimeOut);
+
             // ///////////////////////
             postMethod.setParams(params);
 
             try {
-                httpClient.getHostConfiguration()
-                        .setHost(diamondConfigure.getDomainNameList().get(this.domainNamePos.get()),
-                                this.diamondConfigure.getPort());
-
+                httpClient.getHostConfiguration().setHost(diamondConfigure.getDomainNameList().get(this.domainNamePos.get()),
+                        this.diamondConfigure.getPort());
                 int httpStatus = httpClient.executeMethod(postMethod);
-
+                log.info("Response code:"+httpStatus);
                 switch (httpStatus) {
                     case SC_OK: {
                         Set<String> result = getUpdateDataIds(postMethod);
@@ -824,8 +823,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
                 postMethod.releaseConnection();
             }
         }
-        throw new RuntimeException("获取修改过的DataID列表超时 "
-                + diamondConfigure.getDomainNameList().get(this.domainNamePos.get()) + ", 超时时间为：" + timeout);
+        throw new RuntimeException("获取修改过的DataID列表超时 "+ diamondConfigure.getDomainNameList().get(this.domainNamePos.get()) + ", 超时时间为：" + timeout);
     }
 
 
@@ -846,7 +844,6 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
     /**
      * 获取探测更新的DataID的请求字符串
      *
-     * @param localModifySet
      * @return
      */
     private String getProbeUpdateString() {
@@ -881,6 +878,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
             }
         }
         String probeModifyString = probeModifyBuilder.toString();
+        log.info("--------------------------------------:"+probeModifyBuilder);
         return probeModifyString;
     }
 
