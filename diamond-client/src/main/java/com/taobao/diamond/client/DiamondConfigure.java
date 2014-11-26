@@ -53,7 +53,7 @@ public class DiamondConfigure {
 
 
     public DiamondConfigure() {
-        filePath = "/app/kdiamond";
+        filePath = Constants.LOCAL_FILE_PATH;
         File dir = new File(filePath);
         dir.mkdirs();
 

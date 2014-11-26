@@ -10,6 +10,7 @@
 package com.taobao.diamond.common;
 
 public class Constants {
+    public static final String LOCAL_FILE_PATH = "/app/kdiamond";
 
     public static final String DEFAULT_GROUP = "DEFAULT_GROUP";
 
