@@ -304,10 +304,10 @@ public class ServerAddressProcessor {
         } else {
             if (acquireCount == 0) {
                 configServerAddress = Constants.DEFAULT_DOMAINNAME;
-                port = Constants.DEFAULT_PORT;
+                port = Constants.CONFIGSERVER_PORT;
             } else {
                 configServerAddress = Constants.DAILY_DOMAINNAME;
-                port = Constants.DEFAULT_PORT;
+                port = Constants.CONFIGSERVER_PORT;
             }
         }
         hostConfiguration.setHost(configServerAddress, port);

@@ -46,7 +46,7 @@ public class DiamondConfigure {
     private int retrieveDataRetryTimes = Integer.MAX_VALUE / 10;
 
     private String configServerAddress = null;
-    private int configServerPort = Constants.DEFAULT_PORT;
+    private int configServerPort = Constants.CONFIGSERVER_PORT;
 
     // 本地数据保存路径
     private String filePath;

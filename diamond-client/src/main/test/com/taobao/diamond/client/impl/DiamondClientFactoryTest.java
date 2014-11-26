@@ -16,7 +16,7 @@ public class DiamondClientFactoryTest {
         DiamondConfigure diamondConfigure = new DiamondConfigure();
         diamondConfigure.setConfigServerAddress("192.168.3.203");
 
-        diamondConfigure.setConfigServerPort(8080);
+        diamondConfigure.setConfigServerPort(8081);
         ds.addDataId("test-1", "testg");
         ds.setDiamondConfigure(diamondConfigure);
         SubscriberListener sl = ds.getSubscriberListener();

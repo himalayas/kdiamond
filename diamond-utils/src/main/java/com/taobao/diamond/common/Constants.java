@@ -20,7 +20,8 @@ public class Constants {
 
     public static final String DAILY_DOMAINNAME = "kdiamond.kuaidadi.kd";
 
-    public static final int DEFAULT_PORT = 8080;
+    public static final int DEFAULT_PORT = 8081;
+    public static final int CONFIGSERVER_PORT = 80;
 
     public static final String NULL = "";
 
@@ -56,7 +57,7 @@ public class Constants {
 
     public static final String HTTP_URI_FILE = "/diamond-server/config.co";
 
-    public static final String CONFIG_HTTP_URI_FILE = "/diamond-server/diamond";
+    public static final String CONFIG_HTTP_URI_FILE = "/diamond";
 
     public static final String HTTP_URI_LOGIN = "/url";
 

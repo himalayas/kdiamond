@@ -675,7 +675,7 @@ Validation.addAllThese([
     }],
     /*
      * Usage: validate-ajax-$url
-     * Example: <input id='email' class='validate-ajax-http://localhost:8080/validate-email.jsp'>
+     * Example: <input id='email' class='validate-ajax-http://localhost:8081/validate-email.jsp'>
      */
     ['validate-ajax', function (v, elm, args, metadata) {
         var form = ValidationUtils.getReferenceForm(elm);
