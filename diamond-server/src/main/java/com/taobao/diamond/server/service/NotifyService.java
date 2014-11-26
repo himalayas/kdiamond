@@ -95,7 +95,7 @@ public class NotifyService {
         String urlString = PROTOCOL + address + URL_PREFIX;
         // 如果有指定url，使用指定的url
         if (specialUrl != null && StringUtils.hasLength(specialUrl.trim())) {
-            urlString = specialUrl;
+            urlString = PROTOCOL + specialUrl + URL_PREFIX;
         }
         urlString += "?method=notifyConfigInfo&dataId=" + dataId + "&group=" + group;
         return urlString;
