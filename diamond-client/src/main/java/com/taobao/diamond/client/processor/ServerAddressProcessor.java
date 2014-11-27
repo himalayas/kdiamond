@@ -205,6 +205,7 @@ public class ServerAddressProcessor {
                 bufferedWriter.newLine();
             }
             bufferedWriter.flush();
+            log.info("Server list save to local success.");
         } catch (Exception e) {
             log.error("存储服务器地址到本地文件失败", e);
         } finally {
@@ -327,15 +328,16 @@ public class ServerAddressProcessor {
                 BufferedReader bufferedReader = new BufferedReader(reader);
                 String address = null;
                 List<String> newDomainNameList = new LinkedList<String>();
+
                 while ((address = bufferedReader.readLine()) != null) {
                     address = address.trim();
-                    log.info(address);
+
                     if (StringUtils.isNotBlank(address)) {
                         newDomainNameList.add(address);
                     }
                 }
                 if (newDomainNameList.size() > 0) {
-                    log.debug("更新使用的服务器列表");
+                    log.info("Get Server list from config server:"+newDomainNameList);
                     this.diamondConfigure.setDomainNameList(newDomainNameList);
                     return true;
                 }

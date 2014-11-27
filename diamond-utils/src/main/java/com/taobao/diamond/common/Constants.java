@@ -16,9 +16,9 @@ public class Constants {
 
     public static final String BASE_DIR = "config-data";
 
-    public static final String DEFAULT_DOMAINNAME = "kdiamond.kuaidadi.kd";
+    public static final String DEFAULT_DOMAINNAME = "kdiamond";
 
-    public static final String DAILY_DOMAINNAME = "kdiamond.kuaidadi.kd";
+    public static final String DAILY_DOMAINNAME = "kdiamond";
 
     public static final int DEFAULT_PORT = 8081;
     public static final int CONFIGSERVER_PORT = 80;

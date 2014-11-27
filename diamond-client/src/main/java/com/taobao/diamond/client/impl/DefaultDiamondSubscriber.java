@@ -221,7 +221,6 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
                     checkDiamondServerConfigInfo();
                     checkSnapshot();
                 } catch (Exception e) {
-                    e.printStackTrace();
                     log.error("循环探测发生异常", e);
                 } finally {
                     rotateCheckConfigInfo();
@@ -235,7 +234,6 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
 
     /**
      * 向DiamondServer请求dataId对应的配置信息，并将结果抛给客户的监听器
-     *
      */
     private void receiveConfigInfo(final CacheData cacheData) {
         scheduledExecutor.execute(new Runnable() {
@@ -539,9 +537,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
         long waitTime = 0;
 
         String uri = getUriString(dataId, group);
-//        if (log.isInfoEnabled()) {
-            log.info("Request URL:"+uri);
-//        }
+        log.info("Request URL:" + uri);
 
         CacheData cacheData = getCacheData(dataId, group);
 
@@ -614,7 +610,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
                 httpMethod.releaseConnection();
             }
         }
-        throw new RuntimeException("获取ConfigureInfomation超时, DataID" + dataId + ", Group为：" + group + ",超时时间为："+ timeout);
+        throw new RuntimeException("获取ConfigureInfomation超时, DataID" + dataId + ", Group为：" + group + ",超时时间为：" + timeout);
     }
 
 
@@ -818,7 +814,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
                 postMethod.releaseConnection();
             }
         }
-        throw new RuntimeException("获取修改过的DataID列表超时 "+ diamondConfigure.getDomainNameList().get(this.domainNamePos.get()) + ", 超时时间为：" + timeout);
+        throw new RuntimeException("获取修改过的DataID列表超时 " + diamondConfigure.getDomainNameList().get(this.domainNamePos.get()) + ", 超时时间为：" + timeout);
     }
 
 
