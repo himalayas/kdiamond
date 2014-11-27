@@ -50,7 +50,6 @@ public class DefaultDiamondManager implements DiamondManager {
         this.group = group;
 
         diamondSubscriber = DiamondClientFactory.getSingletonDiamondSubscriber();
-
         this.managerListeners.add(managerListener);
         ((DefaultSubscriberListener) diamondSubscriber.getSubscriberListener()).addManagerListeners(this.dataId,
                 this.group, this.managerListeners);

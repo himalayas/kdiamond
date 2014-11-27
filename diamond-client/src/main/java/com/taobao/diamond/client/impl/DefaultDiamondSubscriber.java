@@ -227,7 +227,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
                 }
             }
 
-        }, bFirstCheck ? 60 : diamondConfigure.getPollingIntervalTime(), TimeUnit.SECONDS);
+        }, bFirstCheck ? 10 : diamondConfigure.getPollingIntervalTime(), TimeUnit.SECONDS);
         bFirstCheck = false;
     }
 

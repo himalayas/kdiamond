@@ -38,7 +38,7 @@ public class ServerAddressProcessor {
     private HttpClient configHttpClient = null;
     private ScheduledExecutorService scheduledExecutor = null;
 
-    private int asynAcquireIntervalInSec = 300;
+    private int asynAcquireIntervalInSec = 10;
 
 
     public ServerAddressProcessor(DiamondConfigure diamondConfigure, ScheduledExecutorService scheduledExecutor) {
