@@ -997,7 +997,7 @@ class DefaultDiamondSubscriber implements DiamondSubscriber {
             String modifiedDataIdsString = httpMethod.getResponseBodyAsString();
             return convertStringToSet(modifiedDataIdsString);
         } catch (Exception e) {
-
+            log.error(e);
         }
         return modifiedDataIdSet;
 
